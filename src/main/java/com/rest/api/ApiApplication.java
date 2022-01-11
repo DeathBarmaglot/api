@@ -13,11 +13,11 @@ public class ApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApiApplication.class, args);
     }
-    @Bean
-    CommandLineRunner commandLineRunner(ArticleServiceImpl articleService) {
-        return args -> {
-            Article post = new Article("Good News everyone", "task #1 is done");
-            articleService.saveArticle(post);
-        };
-    }
+//    @Bean
+//    CommandLineRunner commandLineRunner(ArticleServiceImpl articleService) {
+//        return args -> {
+//            Article post = new Article("Good News everyone", "task #1 is done");
+//            articleService.saveArticle(post);
+//        };
+//    }
 }

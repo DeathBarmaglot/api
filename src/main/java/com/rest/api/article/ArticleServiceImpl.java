@@ -10,9 +10,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ArticleServiceImpl implements  ArticleService{
+public class ArticleServiceImpl implements ArticleService{
 
-    @Autowired
     private final ArticleRepository articleRepository;
 
     @Override
@@ -29,11 +28,6 @@ public class ArticleServiceImpl implements  ArticleService{
     }
 
     @Override
-    public Article getById(long id) {
-        return articleRepository.getById(id);
-    }
-
-    @Override
-    public void removeArticle(long id) { articleRepository.deleteById(id);
+    public void removeArticle(Long id) { articleRepository.deleteById(id);
     }
 }

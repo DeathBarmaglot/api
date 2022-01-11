@@ -1,9 +1,8 @@
 package com.rest.api.article;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -12,14 +11,11 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ArticleController {
-    private final ArticleService articleService;
 
-    @RequestMapping(path = "/api/v1/posts", method = RequestMethod.GET)
-    public ResponseEntity<List<Article>> findAllPost() {
-        return ResponseEntity.ok().body(articleService.getArticles());
-    }
+    private final ArticleService articleService;
+    private final ArticleRepository articleRepository;
 
     @RequestMapping(path = "/api/v1/posts", method = RequestMethod.POST)
     public ResponseEntity<Article> addNewArticle(@RequestBody Article article) {
@@ -29,19 +25,22 @@ public class ArticleController {
         return ResponseEntity.created(uri).body(articleService.getArticle(newArticle.getTitle()));
     }
 
-    @RequestMapping(path = "/api/v1/posts/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<List<Article>> editArticles(@PathVariable long id, @RequestBody Article article) {
-        Article existed = articleService.getById(id);
-        Assert.notNull(existed, "article not found");
-        existed.setTitle(article.getTitle());
-        existed.setContent(article.getContent());
-        articleService.saveArticle(existed);
-        return ResponseEntity.ok().body(articleService.getArticles());
+    @PutMapping("/api/v1/posts/{id}")
+    public Article replaceEmployee(@RequestBody Article newArticle, @PathVariable Long id) {
+        return articleRepository.findById(id)
+                .map(article -> {
+                    article.setTitle(newArticle.getTitle());
+                    article.setContent(newArticle.getContent());
+                    return articleRepository.save(article);
+                })
+                .orElseGet(() -> {
+                    newArticle.setId(id);
+                    return articleRepository.save(newArticle);
+                });
     }
 
-    @RequestMapping(path = "/api/v1/posts/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<List<Article>> deleteArticle(@PathVariable long id, @RequestBody Article article) {
+    @DeleteMapping("/api/v1/posts/{id}")
+    void deleteArticle(@PathVariable Long id) {
         articleService.removeArticle(id);
-        return ResponseEntity.ok().body(articleService.getArticles());
     }
 }
