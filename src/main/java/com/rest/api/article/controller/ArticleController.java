@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -25,11 +26,11 @@ public class ArticleController {
 
 
     @RequestMapping(path = "/api/v1/posts", method = RequestMethod.POST)
-    public ResponseEntity<Article> addNewArticle(@RequestBody Article article) {
+    public ResponseEntity<Optional<Article>> addNewArticle(@RequestBody Article article) {
         Article newArticle = new Article(article.getTitle(), article.getContent());
         articleService.saveArticle(newArticle);
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/posts").toUriString());
-        return ResponseEntity.created(uri).body(articleService.getArticle(newArticle.getTitle()));
+        return ResponseEntity.created(uri).body(articleService.getArticle(newArticle.getId()));
     }
 
     @PutMapping("/api/v1/posts/{id}")

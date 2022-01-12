@@ -8,10 +8,11 @@ import com.rest.api.article.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,7 +25,8 @@ public class ArticleGetController {
 
     @GetMapping("/{id}")
     public Article getById(@PathVariable Long id) {
-        return articleRepository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id));
+        return articleRepository.findById(id)
+                .orElseThrow(() -> new ArticleNotFoundException(id));
     }
 
     @GetMapping
@@ -32,12 +34,11 @@ public class ArticleGetController {
             @RequestParam Optional<String> sort,
             @RequestParam Optional<Integer> page) {
         return articleRepository.findAll(PageRequest.of(
-                page.orElse(0), 100,
-                Sort.Direction.ASC, sort.orElse("id")));
+                page.orElse(0), 100,Sort.Direction.ASC, sort.orElse("id")));
     }
 
-    @GetMapping("/{id}/comments")
-    public Optional<Comment> getAllComments(@PathVariable Long id, Pageable page) {
-        return commentRepository.findById(id);
+    @GetMapping("/{postId}/comments")
+        public Page<Comment> getAllCommentsByPostId(@PathVariable (value = "postId") Long postId, Pageable pageable) {
+        return commentRepository.findById(postId, pageable);
     }
 }

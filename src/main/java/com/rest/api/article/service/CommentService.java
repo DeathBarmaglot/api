@@ -1,11 +1,13 @@
 package com.rest.api.article.service;
 
-import com.rest.api.article.entity.Comment;
+import com.rest.api.article.repository.CommentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface CommentService {
+@RequiredArgsConstructor
+public class CommentService {
 
-    Comment getCommentById(Long id);
+    private final CommentRepository commentRepository;
 
 }
