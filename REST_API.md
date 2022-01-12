@@ -1,12 +1,12 @@
 ##level 1:
 ###У нас есть следущия сущность. Пост -> id, title, content
-GET /api/v1/posts - получение всех постов
++ GET /api/v1/posts - получение всех постов
 
-POST /api/v1/posts - добавление нового поста, пост передается в формате JSON
++ POST /api/v1/posts - добавление нового поста, пост передается в формате JSON
 
-PUT /api/v1/posts/{id} - модификация поста, новая версия поста передается в формате JSON
++ PUT /api/v1/posts/{id} - модификация поста, новая версия поста передается в формате JSON
 
-DELETE /api/v1/posts/{id} - удаление поста по id Используем Spring boot + Spring Data Jpa
++ DELETE /api/v1/posts/{id} - удаление поста по id Используем Spring boot + Spring Data Jpa
 
 ##level 2:
 ###Покрываем все выше тестами через MockMvc,в дальнейшем стараемся писать тесты до написания нового функционала.
@@ -14,7 +14,7 @@ DELETE /api/v1/posts/{id} - удаление поста по id Использу
 
 GET /api/v1/posts?title=:title - поиск постов с тайтлом :title
 
-GET /api/v1/posts?sort=title - возвращаем все посты отсортированные по тайтлу
++ GET /api/v1/posts?sort=title - возвращаем все посты отсортированные по тайтлу
 
 ##level 3: 
 ###Добавляем в сущность пост поле star. С помощью него мы будем управлять списком топ постов.
@@ -36,3 +36,14 @@ GET /api/v1/posts/{postId}/comment/{commentId}
 
 ##level 5:
 GET /api/v1/posts/1/full - возвращает JSON поста с ид = 1, и всеми вложенными комментариями в него
+
+
+//TODO 
+- unit test, 
+- Integration test, 
+- MockMvc, 
+- GET /api/v1/posts?title=:title 
+- POST /api/v1/posts/1/comments
+- GET /api/v1/posts/{id}/comments
+- GET /api/v1/posts/{postId}/comment/{commentId}
+- GET /api/v1/posts/1/full

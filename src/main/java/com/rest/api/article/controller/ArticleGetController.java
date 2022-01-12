@@ -1,11 +1,17 @@
-package com.rest.api.article;
+package com.rest.api.article.controller;
 
+import com.rest.api.article.ArticleNotFoundException;
+import com.rest.api.article.entity.Article;
+import com.rest.api.article.entity.Comment;
+import com.rest.api.article.repository.ArticleRepository;
+import com.rest.api.article.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.Optional;
 
 @RestController
@@ -14,6 +20,7 @@ import java.util.Optional;
 public class ArticleGetController {
 
     private final ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
 
     @GetMapping("/{id}")
     public Article getById(@PathVariable Long id) {
@@ -22,11 +29,15 @@ public class ArticleGetController {
 
     @GetMapping
     public Page<Article> filterByTitle(
-            @PathVariable String title,
             @RequestParam Optional<String> sort,
             @RequestParam Optional<Integer> page) {
         return articleRepository.findAll(PageRequest.of(
                 page.orElse(0), 100,
                 Sort.Direction.ASC, sort.orElse("id")));
+    }
+
+    @GetMapping("/{id}/comments")
+    public Optional<Comment> getAllComments(@PathVariable Long id, Pageable page) {
+        return commentRepository.findById(id);
     }
 }

@@ -1,7 +1,8 @@
-package com.rest.api.article;
+package com.rest.api.article.service;
 
+import com.rest.api.article.entity.Article;
+import com.rest.api.article.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

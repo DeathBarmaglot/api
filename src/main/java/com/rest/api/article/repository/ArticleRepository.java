@@ -1,13 +1,11 @@
-package com.rest.api.article;
+package com.rest.api.article.repository;
 
+import com.rest.api.article.entity.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
-import java.util.List;
-
+@Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     Article findByTitle(String title);
-
-    List<Article> findAllByTitle(String title, Pageable pageable);
 
 }

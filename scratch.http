@@ -1,0 +1,299 @@
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "News",
+  "content": "Good"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 2,
+  "title": "News",
+  "content": "Good"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 3,
+  "title": "News",
+  "content": "Good"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 4,
+  "title": "News",
+  "content": "Bad"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 6,
+  "title": "Good News everyone",
+  "content": "task #1 is done"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 7,
+  "title": "News",
+  "content": "postman"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 8,
+  "title": "New",
+  "content": "postman"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 9,
+  "title": "Good Articles everyone",
+  "content": "task #1 is done"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 12,
+  "title": "Article",
+  "content": "postman"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 13,
+  "title": "Article",
+  "content": "postman"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 15,
+  "title": "Articlez",
+  "content": "postman"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 16,
+  "title": "Articlez",
+  "content": "postman"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 17,
+  "title": "Articlez",
+  "content": "postman"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 18,
+  "title": "Articlez",
+  "content": "postman"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 19,
+  "title": "Articlez",
+  "content": "postman"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 20,
+  "title": "Good Articles",
+  "content": "scratch"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 23,
+  "title": "Articlez",
+  "content": "postman"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 5,
+  "title": "Articles",
+  "content": "Good"
+}
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 25,
+  "title": "Articles",
+  "content": "Good"
+}
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "title": "Articlez",
+  "content": "postman"
+}
+
+
+
+
+###
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/json
+
+{
+  "id": 25,
+  "title": "ArticlexX",
+  "content": "Good"
+}
+
+
+
+###
+PUT http://localhost:8080/api/v1/posts/25
+
+{
+  "id": 25,
+  "title": "Article",
+  "content": "Good"
+}
+
+
+
+
+###
+GET http://localhost:8080/api/v1/posts
+
+
+
+
+###
+DELETE http://localhost:8080/api/v1/posts/14
+
+
+
+
+###
+PUT http://localhost:8080/api/v1/posts/10
+
+
+
+
+### Check response status and content-type
+GET http://localhost:8080/api/v1/posts
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+
+client.test("Response content-type is json", function() {
+  var type = response.contentType.mimeType;
+  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+});
+%}
+
+
+
+
+
+### Send POST request with body as parameters
+POST http://localhost:8080/api/v1/posts
+Content-Type: application/x-www-form-urlencoded
+
+id=10&value=content
+
+
+###

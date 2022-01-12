@@ -1,5 +1,11 @@
-package com.rest.api.article;
+package com.rest.api.article.controller;
 
+import com.rest.api.article.ArticleNotFoundException;
+import com.rest.api.article.entity.Article;
+import com.rest.api.article.entity.Comment;
+import com.rest.api.article.repository.ArticleRepository;
+import com.rest.api.article.repository.CommentRepository;
+import com.rest.api.article.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -16,6 +21,8 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
+
 
     @RequestMapping(path = "/api/v1/posts", method = RequestMethod.POST)
     public ResponseEntity<Article> addNewArticle(@RequestBody Article article) {
@@ -31,6 +38,7 @@ public class ArticleController {
                 .map(article -> {
                     article.setTitle(newArticle.getTitle());
                     article.setContent(newArticle.getContent());
+                    article.setStar(newArticle.getStar());
                     return articleRepository.save(article);
                 })
                 .orElseGet(() -> {
@@ -43,4 +51,13 @@ public class ArticleController {
     void deleteArticle(@PathVariable Long id) {
         articleService.removeArticle(id);
     }
+
+    @PostMapping("/api/v1/posts/{articleId}/comments")
+    public Comment addNewComment(@PathVariable(value = "articleId") Long articleId, @RequestBody Comment comment) {
+        return articleRepository.findById(articleId).map(article -> {
+            comment.setArticles(article);
+            return commentRepository.save(comment);
+        }).orElseThrow(() -> new ArticleNotFoundException(articleId));
+    }
+
 }
