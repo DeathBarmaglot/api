@@ -28,11 +28,12 @@ DELETE /api/v1/posts/{id}/star - убрать отметку топ поста.
 ##level 4:
 ###Добавляется сущность комментарий (на данный момент аннонимеых) id, text, creationDate
 ####(не передается с клиента а генерируется в приложении), postId REST запросы для работы с комментами
-POST /api/v1/posts/1/comments
 
-GET /api/v1/posts/{id}/comments
++ POST /api/v1/posts/1/comments
 
-GET /api/v1/posts/{postId}/comment/{commentId}
++ GET /api/v1/posts/{id}/comments
+
++ GET /api/v1/posts/{postId}/comment/{commentId}
 
 ##level 5:
 GET /api/v1/posts/1/full - возвращает JSON поста с ид = 1, и всеми вложенными комментариями в него
@@ -42,8 +43,11 @@ GET /api/v1/posts/1/full - возвращает JSON поста с ид = 1, и 
 - unit test, 
 - Integration test, 
 - MockMvc, 
+ 
 - GET /api/v1/posts?title=:title 
-- POST /api/v1/posts/1/comments
-- GET /api/v1/posts/{id}/comments
-- GET /api/v1/posts/{postId}/comment/{commentId}
+ 
 - GET /api/v1/posts/1/full
+ 
+- GET /api/v1/posts/star
+- PUT /api/v1/posts/{id}/star
+- DELETE /api/v1/posts/{id}/star

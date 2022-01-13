@@ -27,8 +27,8 @@ public class Article implements Serializable {
     @Column(name = "star")
     private Boolean star = false;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Comment> comments = new HashSet<>();
+//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Set<Comment> comments = new HashSet<>();
 
     public Article(String title, String content) {
         this.title = title;

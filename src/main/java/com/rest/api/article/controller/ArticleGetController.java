@@ -9,22 +9,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/posts")
 public class ArticleGetController {
 
+    @Autowired
+    private final CommentRepository commentRepository;
 
-        @Autowired
-        private CommentRepository commentRepository;
-
-        @Autowired
-        private ArticleRepository articleRepository;
+    @Autowired
+    private final ArticleRepository articleRepository;
 
     @GetMapping("/{id}")
     public Article getById(@PathVariable Long id) {
@@ -37,10 +37,20 @@ public class ArticleGetController {
             @RequestParam Optional<String> sort,
             @RequestParam Optional<Integer> page) {
         return articleRepository.findAll(PageRequest.of(
-                page.orElse(0), 100,Sort.Direction.ASC, sort.orElse("id")));
+                page.orElse(0), 100, Sort.Direction.ASC, sort.orElse("id")));
     }
+
     @GetMapping("/{postId}/comments")
-    public Page<Comment> getAllCommentsByPostId(@PathVariable (value = "postId") Long postId, Pageable pageable) {
-return commentRepository.findByArticleId(postId, pageable);
+    public List<Comment> getAllCommentsByPostId(@PathVariable(value = "postId") Long postId) {
+        Article article = articleRepository.findById(postId).orElseThrow(() -> new ArticleNotFoundException(postId));
+        return commentRepository.findByArticle(article, Sort.unsorted());
+    }
+
+    @GetMapping("/{postId}/comments/{commentId}")
+    public Optional<Comment> getCommentByPostId(
+            @PathVariable(value = "postId") Long postId,
+            @PathVariable(value = "commentId") Long commentId) {
+        Article article = articleRepository.findById(postId).orElseThrow(() -> new ArticleNotFoundException(postId));
+        return commentRepository.findById(commentId);
     }
 }

@@ -20,4 +20,5 @@ public class ArticleService{
 
     public void removeArticle(Long id) { articleRepository.deleteById(id);}
 
+    public List <Article> getAllPosts() { return articleRepository.findAll(); }
 }

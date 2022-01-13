@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 @SpringBootApplication
@@ -23,27 +24,34 @@ public class ApiApplication {
     }
 
     @Bean
-    public CommandLineRunner mappingDemo(ArticleRepository articleRepository,
-                                         CommentRepository commentRepository) {
+    public CommandLineRunner mappingDemo(ArticleRepository articleRepository, CommentRepository commentRepository) {
+
         return args -> {
 
-            Article article = new Article("Bruce Eckel", "java philosophy");
+            Article article = new Article(RandomTitle(), RandomTitle());
 
             articleRepository.save(article);
-            Comment comment1 = new Comment(null, "Introduction contents", LocalDateTime.now(), article);
-            Comment comment2 = new Comment(null, "Java 8 contents", LocalDateTime.now(), article);
-            Comment comment3 =new Comment(null, "Concurrency contents", LocalDateTime.now(), article);
+            Comment comment1 = new Comment(null, RandomString(), LocalDateTime.now(), article);
+            Comment comment2 = new Comment(null, RandomString(), LocalDateTime.now(), article);
+            Comment comment3 =new Comment(null, RandomString(), LocalDateTime.now(), article);
 
             commentRepository.save(comment1);
             commentRepository.save(comment2);
             commentRepository.save(comment3);
 
 //            Set<Comment> set = new HashSet<>(commentRepository.findAll());
-//
 //            article.setComments(set);
-//
-
         };
+    }
+
+    private String RandomString() {
+        String names[] = "I have been doing, much studying in java, and I have a new project, I would like to do".split(", ");
+        return names[new Random().nextInt(names.length)];
+    }
+
+    private String RandomTitle() {
+        String names[] = "Writing JUnit Tests Rest Controller MockMvc Mockito".split(" ");
+        return names[new Random().nextInt(names.length)];
     }
 
 }
