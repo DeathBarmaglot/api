@@ -7,7 +7,9 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -15,17 +17,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "comments")
-public class Comment {
+public class Comment implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "text", nullable = false)
     private String text;
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
-    private LocalDateTime creationDate;
+    private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "articles_id")
-    private Article articles;
+    private Article article;
 
 }

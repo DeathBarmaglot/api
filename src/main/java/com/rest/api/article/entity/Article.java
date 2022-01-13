@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -14,20 +16,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "articles")
-public class Article {
+public class Article implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="title", nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(name="content", nullable = false)
+    @Column(name = "content", nullable = false)
     private String content;
-    @Column(name="star")
+    @Column(name = "star")
     private Boolean star = false;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Comment> comments = new HashSet<>();
 
     public Article(String title, String content) {
         this.title = title;
         this.content = content;
     }
 }
-

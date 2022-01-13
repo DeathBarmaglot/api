@@ -6,13 +6,20 @@ import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.CommentRepository;
 import com.rest.api.article.service.ArticleService;
+import com.rest.api.article.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.awt.print.Pageable;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -56,7 +63,7 @@ public class ArticleController {
     @PostMapping("/api/v1/posts/{articleId}/comments")
     public Comment addNewComment(@PathVariable(value = "articleId") Long articleId, @RequestBody Comment comment) {
         return articleRepository.findById(articleId).map(article -> {
-            comment.setArticles(article);
+            comment.setArticle(article);
             return commentRepository.save(comment);
         }).orElseThrow(() -> new ArticleNotFoundException(articleId));
     }
