@@ -1,5 +1,5 @@
 ##level 1:
-###У нас есть следущия сущность. Пост -> id, title, content
+###У нас есть следующая сущность. Пост -> id, title, content
 + GET /api/v1/posts - получение всех постов
 
 + POST /api/v1/posts - добавление нового поста, пост передается в формате JSON
@@ -19,11 +19,11 @@ GET /api/v1/posts?title=:title - поиск постов с тайтлом :titl
 ##level 3: 
 ###Добавляем в сущность пост поле star. С помощью него мы будем управлять списком топ постов.
 
-GET /api/v1/posts/star - получить все топ посты.
++ GET /api/v1/posts/star - получить все топ посты.
 
-PUT /api/v1/posts/{id}/star - отметить пост как топ.
++ PUT /api/v1/posts/{id}/star - отметить пост как топ.
 
-DELETE /api/v1/posts/{id}/star - убрать отметку топ поста.
++ DELETE /api/v1/posts/{id}/star - убрать отметку топ поста.
 
 ##level 4:
 ###Добавляется сущность комментарий (на данный момент аннонимеых) id, text, creationDate
@@ -36,18 +36,13 @@ DELETE /api/v1/posts/{id}/star - убрать отметку топ поста.
 + GET /api/v1/posts/{postId}/comment/{commentId}
 
 ##level 5:
-GET /api/v1/posts/1/full - возвращает JSON поста с ид = 1, и всеми вложенными комментариями в него
++ GET /api/v1/posts/1/full - возвращает JSON поста с ид = 1, и всеми вложенными комментариями в него
 
 
 //TODO 
 - unit test, 
 - Integration test, 
-- MockMvc, 
++- MockMvc, 
  
-- GET /api/v1/posts?title=:title 
- 
-- GET /api/v1/posts/1/full
- 
-- GET /api/v1/posts/star
-- PUT /api/v1/posts/{id}/star
-- DELETE /api/v1/posts/{id}/star
+- GET /api/v1/posts?title=:title
+- (with environment variables  GET {{host}}/get?show_env={{show_env}})

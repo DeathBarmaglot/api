@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-public class ArticleGetControllerTest {
+public class GetControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -46,10 +46,6 @@ public class ArticleGetControllerTest {
     private ArticleRepository articleRepository;
     private ArticleService articleService;
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        articleService = new ArticleService(articleRepository);
-    }
 
     @Test
     public void articleGetControllerTestIsNull() throws Exception {
@@ -82,7 +78,7 @@ public class ArticleGetControllerTest {
         this.mockMvc.perform(get("/api/v1/posts"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("java philosophy")));
+                .andExpect(content().string(containsString("Writing")));
     }
 
     @Test

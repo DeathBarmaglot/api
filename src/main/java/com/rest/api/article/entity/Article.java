@@ -7,8 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -25,7 +23,7 @@ public class Article implements Serializable {
     @Column(name = "content", nullable = false)
     private String content;
     @Column(name = "star")
-    private Boolean star = false;
+    private boolean star = false;
 
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private Set<Comment> comments = new HashSet<>();

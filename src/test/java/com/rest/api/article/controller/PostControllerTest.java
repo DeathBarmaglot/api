@@ -17,12 +17,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ArticleControllerTest {
+public class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @InjectMocks
-    private ArticleController controller;
+    private PostController controller;
 
 
     @Test
