@@ -18,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -26,8 +28,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.servlet.http.HttpSession;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,50 +51,56 @@ public class GetControllerTest {
     private ArticleRepository articleRepository;
     private ArticleService articleService;
 
-
-    @Test
-    public void articleGetControllerTestIsNull() throws Exception {
-        assertThat(articleService).isNull();
-    }
-
-    @Test
-    public void articleArgumentCaptor() throws Exception {
-        Article newArticle = new Article("Test", "add");
-        articleRepository.save(newArticle);
-        ArgumentCaptor<Article> articleArgumentCaptor = ArgumentCaptor.forClass(Article.class);
-        verify(articleRepository).save(articleArgumentCaptor.capture());
-        Article article = articleArgumentCaptor.getValue();
-        assertThat(article).isEqualTo(newArticle);
-    }
-
     @Test
     public void articleGetAll() throws Exception {
         articleRepository.save(new Article("Test", "add"));
         assertThat(articleRepository).isNotNull();
         articleRepository.findAll();
         verify(articleRepository).findAll();
-
-        //        articleService.getAllPosts();
-
     }
 
     @Test
-    public void articleGetControllerTestStatusOk() throws Exception {
+    public void getArticleControllerTestStatusOk() throws Exception {
         this.mockMvc.perform(get("/api/v1/posts"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Writing")));
     }
 
+
     @Test
-    public void articleGetControllerTestContainsJson() throws Exception {
-        this.mockMvc.perform(get("/api/v1/posts"))
+    public void getById() throws Exception {
+        this.mockMvc.perform(get("http://localhost:8080/api/v1/posts/5"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title", Matchers.is("java")));
+                .andExpect(content().string(containsString("{\"id\":5,\"title\":\"Rest\",\"content\":\"Writing\",\"star\":false}")));
     }
 
+    @Test
+    public void filterByTitle() throws Exception {
+        this.mockMvc.perform(get("http://localhost:8080/api/v1/posts?sort=title"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("{\"id\":5,\"title\":\"Rest\",\"content\":\"Writing\",\"star\":false}")));
 
+
+    }
+
+    @Test
+    public void getAllCommentsByPostId() throws Exception {
+    }
+
+    @Test
+    public void getCommentByPostId() throws Exception {
+    }
+
+    @Test
+    public void getTop() throws Exception {
+    }
+
+    @Test
+    public void getFullCommentsByPostId() throws Exception {
+    }
 }
 
 //TODO test 405, 400

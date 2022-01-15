@@ -5,15 +5,13 @@ import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArticleService {
@@ -21,24 +19,17 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final CommentRepository commentRepository;
 
-    public void saveArticle(Article article) {
-        articleRepository.save(article);
-    }
-
-    public Optional<Article> getArticle(Long id) {
-        return articleRepository.findById(id);
-    }
-
-    public void removeArticle(Long id) {
-        Article remove = articleRepository.getById(id);
-        List<Comment> list = commentRepository.findByArticle(remove, Sort.unsorted());
+    public void removeArticle(Article article) {
+        List<Comment> list = commentRepository.findByArticle(article, Sort.unsorted());
         list.forEach(comment -> commentRepository.deleteById(comment.getId()));
-        articleRepository.delete(remove);
+        articleRepository.delete(article);
+        log.info("Removing post {} to the database", article.getTitle());
     }
 
     public Article toggle(Long id, boolean isStar) {
-
         Article newArticle = articleRepository.getById(id);
+
+        log.info("The post {} to the database is {}", newArticle.getTitle(), newArticle.isStar());
 
         return articleRepository.findById(id)
                 .map(article -> {
@@ -51,25 +42,8 @@ public class ArticleService {
                 });
     }
 
-    public Article updateArticle(Article newArticle, Long id) {
-
-        return articleRepository.findById(id)
-                .map(article -> {
-                    article.setTitle(newArticle.getTitle());
-                    article.setContent(newArticle.getContent());
-                    article.setStar(newArticle.isStar());
-                    return articleRepository.save(article);
-                })
-                .orElseGet(() -> {
-                    newArticle.setId(id);
-                    return articleRepository.save(newArticle);
-                });
-    }
-
-    public ResponseEntity<Optional<Article>> addNewArticle(Article article) {
-        Article newArticle = new Article(article.getTitle(), article.getContent());
-        saveArticle(newArticle);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/posts").toUriString());
-        return ResponseEntity.created(uri).body(getArticle(newArticle.getId()));
+    public Article addNewArticle(Article article) {
+        log.info("Saving article {} to the database", article.getTitle());
+        return articleRepository.save(article);
     }
 }

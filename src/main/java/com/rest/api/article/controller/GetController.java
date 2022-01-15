@@ -1,8 +1,9 @@
 package com.rest.api.article.controller;
 
-import com.rest.api.article.ArticleNotFoundException;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
+import com.rest.api.article.entity.Views;
 import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.CommentRepository;
 import com.rest.api.article.service.CommentService;
@@ -26,8 +27,11 @@ public class GetController {
     private final CommentService commentService;
 
     @GetMapping("/{id}")
-    public Article getById(@PathVariable Long id) {
-        return articleRepository.findById(id).orElseThrow(() -> new ArticleNotFoundException(id));}
+    @JsonView(Views.IdTitle.class)
+    public Article getById(
+            @PathVariable(value = "id") Article article) {
+        return article;
+    }
 
     @GetMapping
     public Page<Article> filterByTitle(
@@ -37,18 +41,19 @@ public class GetController {
                 page.orElse(0), 100, Sort.Direction.ASC, sort.orElse("id")));
     }
 
-    @GetMapping("/{postId}/comments")
-    public List<Comment> getAllCommentsByPostId(@PathVariable(value = "postId") Long postId) {
-        Article article = articleRepository.findById(postId).orElseThrow(() -> new ArticleNotFoundException(postId));
+    @GetMapping("/{id}/comments")
+    @JsonView(Views.WithDate.class)
+    public List<Comment> getAllCommentsByPostId(
+            @PathVariable(value = "id") Article article) {
         return commentRepository.findByArticle(article, Sort.unsorted());
     }
 
     @GetMapping("/{postId}/comments/{commentId}")
-    public Optional<Comment> getCommentByPostId(
-            @PathVariable(value = "postId") Long postId,
-            @PathVariable(value = "commentId") Long commentId) {
-        articleRepository.findById(postId).orElseThrow(() -> new ArticleNotFoundException(postId));
-        return commentRepository.findById(commentId);
+    @JsonView(Views.FullArticle.class)
+    public Comment getCommentByPostId(
+            @PathVariable(value = "postId") Article article,
+            @PathVariable(value = "commentId") Comment comment) {
+        return comment;
     }
 
     @GetMapping("/star")

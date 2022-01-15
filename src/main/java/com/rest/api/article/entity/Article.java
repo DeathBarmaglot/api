@@ -1,5 +1,6 @@
 package com.rest.api.article.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,17 +17,19 @@ import java.io.Serializable;
 @Table(name = "articles")
 public class Article implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.Id.class)
     private Long id;
+
+    @JsonView(Views.IdTitle.class)
     @Column(name = "title", nullable = false)
     private String title;
+
     @Column(name = "content", nullable = false)
     private String content;
+
     @Column(name = "star")
     private boolean star = false;
-
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Set<Comment> comments = new HashSet<>();
 
     public Article(String title, String content) {
         this.title = title;

@@ -1,6 +1,6 @@
 package com.rest.api.article.service;
 
-import com.rest.api.article.ArticleNotFoundException;
+import com.rest.api.article.NotFoundException;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.ArticleRepository;
@@ -22,11 +22,11 @@ public class CommentService {
         return articleRepository.findById(articleId).map(article -> {
             comment.setArticle(article);
             return commentRepository.save(comment);
-        }).orElseThrow(() -> new ArticleNotFoundException(articleId));
+        }).orElseThrow(NotFoundException::new);
     }
 
     public List<Object> allCommentByPost(Long postId) {
-        Article article = articleRepository.findById(postId).orElseThrow(() -> new ArticleNotFoundException(postId));
+        Article article = articleRepository.findById(postId).orElseThrow(NotFoundException::new);
         List<Comment> commentList = commentRepository.findByArticle(article, Sort.unsorted());
         return List.of(article, commentList);
     }
