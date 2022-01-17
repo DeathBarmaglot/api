@@ -12,7 +12,7 @@
 ###Покрываем все выше тестами через MockMvc,в дальнейшем стараемся писать тесты до написания нового функционала.
 ####Добавляем поддержку еще нескольких запросов
 
-GET /api/v1/posts?title=:title - поиск постов с тайтлом :title
++ GET /api/v1/posts?title=:title - поиск постов с тайтлом :title
 
 + GET /api/v1/posts?sort=title - возвращаем все посты отсортированные по тайтлу
 
@@ -41,8 +41,4 @@ GET /api/v1/posts?title=:title - поиск постов с тайтлом :titl
 
 //TODO 
 - unit test, 
-- Integration test, 
-+- MockMvc, 
- 
-- GET /api/v1/posts?title=:title
-- (with environment variables  GET {{host}}/get?show_env={{show_env}})
+- Integration test

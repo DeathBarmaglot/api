@@ -6,10 +6,13 @@ import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,6 +26,7 @@ public class ArticleService {
         List<Comment> list = commentRepository.findByArticle(article, Sort.unsorted());
         list.forEach(comment -> commentRepository.deleteById(comment.getId()));
         articleRepository.delete(article);
+
         log.info("Removing post {} to the database", article.getTitle());
     }
 
@@ -45,5 +49,17 @@ public class ArticleService {
     public Article addNewArticle(Article article) {
         log.info("Saving article {} to the database", article.getTitle());
         return articleRepository.save(article);
+    }
+
+    public List<Object> filteredBy(
+            Optional<String> sort, Optional<String> title, Optional<Integer> page) {
+
+        if (title.isPresent()) {
+            return Collections.singletonList(articleRepository.findAll().stream().filter(article ->
+                    title.get().equals(article.getTitle())));
+        } else {
+            return Collections.singletonList(articleRepository.findAll(PageRequest.of(
+                    page.orElse(0), 100, Sort.Direction.ASC, sort.orElse("id"))));
+        }
     }
 }

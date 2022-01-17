@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +30,14 @@ public class CommentService {
         Article article = articleRepository.findById(postId).orElseThrow(NotFoundException::new);
         List<Comment> commentList = commentRepository.findByArticle(article, Sort.unsorted());
         return List.of(article, commentList);
+    }
+
+    public List<Article> getByStar() {
+        return articleRepository.findAll().stream().filter(article ->
+                Boolean.TRUE.equals(article.isStar())).collect(Collectors.toList());
+    }
+
+    public List<Comment> getAllCommentsByPostId(Article article) {
+        return commentRepository.findByArticle(article, Sort.unsorted());
     }
 }
