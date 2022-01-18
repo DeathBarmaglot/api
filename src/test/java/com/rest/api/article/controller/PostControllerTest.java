@@ -3,9 +3,13 @@ package com.rest.api.article.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.rest.api.article.NotFoundException;
 import com.rest.api.article.entity.Article;
+import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.ArticleRepository;
+import com.rest.api.article.repository.CommentRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -21,6 +25,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,8 +35,7 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,8 +50,9 @@ public class PostControllerTest {
 
     @InjectMocks
     private ArticleRepository articleRepository = Mockito.mock(ArticleRepository.class);
+    private CommentRepository commentRepository = Mockito.mock(CommentRepository.class);
 
-    Article ARTICLE = new Article("Test", "add");
+    Article ARTICLE = new Article(7L, "Test", "add", true);
 
     @Test
     public void addNewArticle() {
@@ -73,23 +78,26 @@ public class PostControllerTest {
     @Test
     public void updateArticle() throws Exception {
         String uri = HOST + "/7";
-        Article newArticle = new Article(1L, "Test", "add", true);
+        Article newArticle = new Article(7L, "Test", "add", true);
+        Mockito.when(articleRepository.save(newArticle)).thenReturn(newArticle);
 
-        MvcResult mvcResult = mockMvc
-                .perform(MockMvcRequestBuilders.put(uri)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(mapper(newArticle))).andReturn();
+        Mockito.when(articleRepository.findById(ARTICLE.getId())).thenReturn(Optional.of(ARTICLE));
+        Mockito.when(articleRepository.save(newArticle)).thenReturn(newArticle);
 
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-        String content = mvcResult.getResponse().getContentAsString();
-        assertEquals(content, "{\"id\":7,\"title\":\"Test\",\"content\":\"JUnit\",\"star\":false}");
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper(newArticle));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", is("Test")));
     }
 
     @Test
     public void deleteArticle() throws Exception {
         String uri = HOST + "/7";
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(uri)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(delete(uri)).andReturn();
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
     }
@@ -97,15 +105,19 @@ public class PostControllerTest {
 
     @Test
     public void addNewComment() throws Exception {
-        String uri = HOST;
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(uri)
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        String uri = HOST + "/7/comments";
+        Comment comment = new Comment(1L, "Test", LocalDateTime.now(),ARTICLE);
+        Mockito.when(commentRepository.save(comment)).thenReturn(comment);
 
-        int status = mvcResult.getResponse().getStatus();
-        assertEquals(200, status);
-        String content = mvcResult.getResponse().getContentAsString();
-//        Article[] articleList = super.mapFromJson(content, Article[].class);
-//        assertTrue(articleList.length > 0);
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper(comment));
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.text", is("Test")));
 
     }
 
@@ -115,15 +127,15 @@ public class PostControllerTest {
                         .param("star", String.valueOf(true)))
                 .andDo(print())
                 .andExpect(status().is(200))
-                .andExpect(content().json("{\"title\":\"Rest\"}"));
+                .andExpect(content().json("{\"id\":5,\"star\":true}"));
     }
 
     public void deleteStar() throws Exception {
-        this.mockMvc.perform(put(HOST + "/5/star")
+        this.mockMvc.perform(delete(HOST + "/5/star")
                         .param("star", String.valueOf(false)))
                 .andDo(print())
                 .andExpect(status().is(200))
-                .andExpect(content().json("{}"));
+                .andExpect(content().json("{\"id\":5,\"star\":false}"));
     }
 
     @Test
@@ -147,8 +159,7 @@ public class PostControllerTest {
     public void deleteArticleById_success() throws Exception {
         Mockito.when(articleRepository.findById(ARTICLE.getId())).thenReturn(Optional.of(ARTICLE));
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete(HOST + "/2")
+        mockMvc.perform(delete(HOST + "/2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -157,8 +168,7 @@ public class PostControllerTest {
     public void deleteArticleById_notFound() throws Exception {
         Mockito.when(articleRepository.findById(1L)).thenReturn(null);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/2")
+        mockMvc.perform(delete("/2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(result ->
@@ -195,8 +205,11 @@ public class PostControllerTest {
                 .andExpect(jsonPath("$.title", is("Test")));
     }
 
-    private String mapper(Article post) throws JsonProcessingException {
-        ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+    private String mapper(Object post) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
+                .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+
+        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         return objectWriter.writeValueAsString(post);
 
     }
