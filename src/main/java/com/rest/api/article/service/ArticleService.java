@@ -62,4 +62,8 @@ public class ArticleService {
                     page.orElse(0), 100, Sort.Direction.ASC, sort.orElse("id"))));
         }
     }
+
+    public Article getArticle(Long id) {
+        return articleRepository.findById(id).orElseThrow();
+    }
 }
