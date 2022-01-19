@@ -37,8 +37,3 @@
 
 ##level 5:
 + GET /api/v1/posts/1/full - возвращает JSON поста с ид = 1, и всеми вложенными комментариями в него
-
-
-//TODO 
-- unit test, 
-- Integration test

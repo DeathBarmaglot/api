@@ -13,10 +13,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -36,19 +39,40 @@ class ArticleServiceTest {
 
 
     @Test
-    void removeArticle() {
+    void removeArticle() throws Exception {
+        this.mockMvc.perform(delete(HOST + "/19", ARTICLE.getId())).andExpect(status().isOk());
     }
 
     @Test
-    void toggle() {
+    void toggle() throws Exception {
+        this.mockMvc.perform(put(HOST + "/5/star")
+                        .param("star", String.valueOf(true)))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andExpect(content().json("{\"id\":5,\"star\":true}"));
+
+        this.mockMvc.perform(delete(HOST + "/5/star")
+                        .param("star", String.valueOf(false)))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andExpect(content().json("{\"id\":5,\"star\":false}"));
     }
 
     @Test
-    void addNewArticle() {
+    void addNewArticle() throws Exception {
+        this.mockMvc.perform(put(HOST + "/5/star")
+                        .param("star", String.valueOf(true)))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andExpect(content().json("{\"id\":5,\"star\":true}"));
     }
 
     @Test
-    void filteredBy() {
+    void filteredBy() throws Exception {
+        this.mockMvc.perform(get(HOST + "?title=Rest"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("\"title\":\"Rest\",\"content\":\"Writing\",\"star\":false")));
     }
 
     @Test

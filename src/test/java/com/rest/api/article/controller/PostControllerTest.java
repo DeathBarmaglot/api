@@ -53,7 +53,7 @@ public class PostControllerTest {
     Article ARTICLE = new Article(7L, "Test", "add", true);
 
     @Test
-    public void addNewArticle() {
+    public void testAddNewArticle() {
 
         articleRepository.save(ARTICLE);
         ArgumentCaptor<Article> articleArgumentCaptor = ArgumentCaptor.forClass(Article.class);
@@ -84,7 +84,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void deleteArticle() throws Exception {
+    public void testDeleteArticle() throws Exception {
         String uri = HOST + "/16";
         MvcResult mvcResult = mockMvc.perform(delete(uri)).andReturn();
         int status = mvcResult.getResponse().getStatus();
@@ -92,7 +92,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void addStar() throws Exception {
+    public void testAddStar() throws Exception {
         this.mockMvc.perform(put(HOST + "/5/star")
                         .param("star", String.valueOf(true)))
                 .andDo(print())
@@ -101,7 +101,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void deleteStar() throws Exception {
+    public void testDeleteStar() throws Exception {
         this.mockMvc.perform(delete(HOST + "/5/star")
                         .param("star", String.valueOf(false)))
                 .andDo(print())
@@ -126,7 +126,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void deleteArticleById_success() throws Exception {
+    public void testDeleteArticleById_success() throws Exception {
         Mockito.when(articleRepository.findById(ARTICLE.getId())).thenReturn(Optional.of(ARTICLE));
 
         mockMvc.perform(delete(HOST + "/52")
@@ -135,7 +135,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void TestDeleteArticleByIdNotFound() throws Exception {
+    public void testDeleteArticleByIdNotFound() throws Exception {
         Mockito.when(articleRepository.findById(20L)).thenReturn(null);
 
         mockMvc.perform(delete(HOST + "/20")
@@ -149,7 +149,6 @@ public class PostControllerTest {
 
     @Test
     public void testUpdateArticleNullId() throws Exception {
-
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -160,7 +159,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void createArticle_success() throws Exception {
+    public void testCreateArticle_success() throws Exception {
         Article post = new Article(1L, "Test", "add", true);
         Mockito.when(articleRepository.save(post)).thenReturn(post);
 
@@ -178,7 +177,6 @@ public class PostControllerTest {
 
     @Test
     public void testGetAllArticles() throws Exception {
-
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get(HOST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -214,16 +212,13 @@ public class PostControllerTest {
 
     @Test
     public void testArticleDelete() throws Exception {
-
-        this.mockMvc.perform(delete(HOST + "/{id}", ARTICLE.getId())).andExpect(status().isOk());
-
+        this.mockMvc.perform(delete(HOST + "/19", ARTICLE.getId())).andExpect(status().isOk());
     }
 
-    private String mapper(Object post) throws JsonProcessingException {
+    protected String mapper(Object post) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
                 .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         return objectWriter.writeValueAsString(post);
-
     }
 }
