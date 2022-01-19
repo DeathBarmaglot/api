@@ -84,7 +84,7 @@ class ArticleServiceTest {
                 .thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Post Not found :" + postId));
 
         this.mockMvc.perform(get("/posts/{id}", postId))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().is4xxClientError())
                 .andExpect(response -> assertTrue(response.getResolvedException() instanceof ResponseStatusException))
                 .andExpect(response -> assertEquals("Post Not found :" + postId, response.getResponse().getErrorMessage()));
     }

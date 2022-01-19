@@ -66,4 +66,19 @@ public class ArticleService {
     public Article getArticle(Long id) {
         return articleRepository.findById(id).orElseThrow();
     }
+
+    public Article updateArticle(Article newArticle, Long id) {
+
+        return articleRepository.findById(id)
+                .map(article -> {
+                    article.setTitle(newArticle.getTitle());
+                    article.setContent(newArticle.getContent());
+                    article.setStar(newArticle.isStar());
+                    return articleRepository.save(article);
+                })
+                .orElseGet(() -> {
+                    newArticle.setId(id);
+                    return articleRepository.save(newArticle);
+                });
+    }
 }

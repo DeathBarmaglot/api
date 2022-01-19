@@ -49,7 +49,7 @@ public class CommentController {
         return commentService.allCommentByPost(postId);
     }
 
-    @PostMapping("/api/v1/posts/{postId}/comments")
+    @PostMapping("/{postId}/comments")
     public Comment addNewComment(
             @PathVariable(value = "postId") Long articleId,
             @RequestBody Comment comment) {

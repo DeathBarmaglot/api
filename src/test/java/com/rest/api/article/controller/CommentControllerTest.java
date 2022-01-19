@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -70,7 +71,7 @@ public class CommentControllerTest extends PostControllerTest {
     public void getCommentByPostId() throws Exception {
         String uri = HOST + "/1/comments/2";
         articleRepository.save(ARTICLE1);
-        assertTrue(articleRepository.findById(1L).isPresent());
+        assertFalse(articleRepository.findById(1L).isPresent());
 
         this.mockMvc.perform(get(uri)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -82,7 +83,7 @@ public class CommentControllerTest extends PostControllerTest {
 
     @Test
     public void getCommentById_success() throws Exception {
-        String uri = HOST + "/comments/1";
+        String uri = HOST + "/1/comments/2";
 
         Mockito.when(commentRepository.findById(COMMENT1.getId())).thenReturn(java.util.Optional.of(COMMENT1));
 
@@ -92,7 +93,7 @@ public class CommentControllerTest extends PostControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.name", is("Comment")));
+                .andExpect(jsonPath("$.text", is("Comment")));
     }
 
     @Test
@@ -109,13 +110,13 @@ public class CommentControllerTest extends PostControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$.text", is("Test")));
     }
 
     @Test
     public void addNewComment() throws Exception {
-        String uri = HOST + "/7";
+        String uri = HOST + "/7/comments";
         Mockito.when(articleRepository.save(ARTICLE)).thenReturn(ARTICLE);
         Mockito.when(commentRepository.save(COMMENT)).thenReturn(COMMENT);
 
@@ -128,12 +129,12 @@ public class CommentControllerTest extends PostControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.text", is("Test")));
+                .andExpect(jsonPath("$.text", is("Comment")));
     }
 
     @Test
     public void testAddNewCommentsAndDeletePostWithComments() throws Exception {
-        String uri = HOST + "/1/comments";
+        String uri = HOST + "/13";
         List<Comment> commentList = new ArrayList<>(Arrays.asList(COMMENT, COMMENT1));
 
         Mockito.when(commentRepository.findAll()).thenReturn(commentList);

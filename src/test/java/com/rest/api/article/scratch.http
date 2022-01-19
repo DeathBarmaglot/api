@@ -9,7 +9,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status === 201, "Response status is not 200");
+  client.assert(response.status === 200, "Response status is not 200");
 });
 
 client.test("Response content-type is json", function() {
@@ -19,7 +19,7 @@ client.test("Response content-type is json", function() {
 %}
 
 ### Successful test: Add top post
-PUT http://localhost:8080/api/v1/posts/15/star
+PUT http://localhost:8080/api/v1/posts/1/star
 Content-Type: application/json
 
 {
@@ -54,7 +54,7 @@ client.test("Response content-type is json", function() {
 %}
 
 ### Successful test: Remove top post
-DELETE http://localhost:8080/api/v1/posts/15/star
+DELETE http://localhost:8080/api/v1/posts/1/star
 Content-Type: application/json
 
 > {%
@@ -147,7 +147,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status === 201, "Response status is 201");
+  client.assert(response.status === 200, "Response status is 201");
 });
 %}
 
@@ -167,7 +167,7 @@ client.test("Request executed successfully", function() {
 %}
 
 ###
-DELETE http://localhost:8080/api/v1/posts/20
+DELETE http://localhost:8080/api/v1/posts/6
 
 > {%
 client.test("Request executed successfully", function() {
@@ -210,7 +210,7 @@ client.test("Response content-type is json", function() {
 %}
 
 ### Successful test: Get post 20 with comment 30
-GET http://localhost:8080/api/v1/posts/5/comments/15
+GET http://localhost:8080/api/v1/posts/5/comments/12
 Content-Type: application/json
 
 > {%
@@ -234,7 +234,7 @@ Content-Type: application/json
 
 > {%
 client.test("Request executed successfully", function() {
-  client.assert(response.status === 201, "Response status is not 200");
+  client.assert(response.status === 200, "Response status is not 200");
 });
 
 client.test("Response content-type is json", function() {
@@ -258,10 +258,17 @@ client.test("Response content-type is json", function() {
 });
 %}
 
-###
+### GET request with dynamic variables
+GET http://localhost:8080/api/v1/posts?title=News
+Accept: application/json
 
-#- GET /api/v1/posts?title=:title
-# GET request with environment variables
-#GET {{host}}/get?show_env={{show_env}}
-#Accept: application/json
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
 
+client.test("Response content-type is json", function() {
+  var type = response.contentType.mimeType;
+  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+});
+%}

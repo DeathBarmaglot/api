@@ -24,10 +24,9 @@ public class PostController {
 
     @PutMapping("/{id}")
     public Article replaceArticle(
-            @PathVariable(value = "id") Article articleDb,
+            @PathVariable(value = "id") Long id,
             @RequestBody Article article) {
-        BeanUtils.copyProperties(articleDb, article, "id");
-        return articleService.addNewArticle(articleDb);
+        return articleService.updateArticle(article, id);
     }
 
     @DeleteMapping("/{id}")

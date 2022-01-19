@@ -102,7 +102,7 @@ public class PostControllerTest {
 
     @Test
     public void testDeleteStar() throws Exception {
-        this.mockMvc.perform(delete(HOST + "/5/star")
+        this.mockMvc.perform(delete(HOST + "/1/star")
                         .param("star", String.valueOf(false)))
                 .andDo(print())
                 .andExpect(status().is(200))
@@ -129,7 +129,7 @@ public class PostControllerTest {
     public void testDeleteArticleById_success() throws Exception {
         Mockito.when(articleRepository.findById(ARTICLE.getId())).thenReturn(Optional.of(ARTICLE));
 
-        mockMvc.perform(delete(HOST + "/52")
+        mockMvc.perform(delete(HOST + "/19")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -138,7 +138,7 @@ public class PostControllerTest {
     public void testDeleteArticleByIdNotFound() throws Exception {
         Mockito.when(articleRepository.findById(20L)).thenReturn(null);
 
-        mockMvc.perform(delete(HOST + "/20")
+        mockMvc.perform(delete(HOST + "/17")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(result ->
@@ -191,14 +191,14 @@ public class PostControllerTest {
 
     @Test
     public void testGetArticle() throws Exception {
-        String uri = HOST + "/5";
+        String uri = HOST + "/1";
         when(articleRepository.getById(ARTICLE.getId())).thenReturn(ARTICLE);
 
         this.mockMvc.perform(get(uri, ARTICLE.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(5)))
-                .andExpect(jsonPath("$.content").value("Writing"))
+                .andExpect(jsonPath("$.content").value("News"))
                 .andExpect(jsonPath("$.title").value("Rest"));
     }
 
