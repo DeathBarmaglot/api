@@ -50,7 +50,7 @@ public class PostControllerTest {
     @InjectMocks
     private final ArticleRepository articleRepository = Mockito.mock(ArticleRepository.class);
 
-    Article ARTICLE = new Article(7L, "Test", "add", true);
+    Article ARTICLE = new Article("Test", "add");
 
     @Test
     public void testAddNewArticle() {
@@ -66,7 +66,7 @@ public class PostControllerTest {
     public void testUpdateArticle() throws Exception {
 
         String uri = HOST + "/1";
-        Article newArticle = new Article(1L, "Test", "add", true);
+        Article newArticle = new Article("Test", "add");
         Mockito.when(articleRepository.save(newArticle)).thenReturn(newArticle);
 
         Mockito.when(articleRepository.findById(ARTICLE.getId())).thenReturn(Optional.of(ARTICLE));
@@ -160,7 +160,7 @@ public class PostControllerTest {
 
     @Test
     public void testCreateArticle_success() throws Exception {
-        Article post = new Article(1L, "Test", "add", true);
+        Article post = new Article("Test", "add");
         Mockito.when(articleRepository.save(post)).thenReturn(post);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(HOST)

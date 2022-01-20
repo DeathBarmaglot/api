@@ -6,6 +6,7 @@ import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,20 +31,10 @@ public class ArticleService {
         log.info("Removing post {} to the database", article.getTitle());
     }
 
-    public Article toggle(Long id, boolean isStar) {
-        Article newArticle = articleRepository.getById(id);
-
-        log.info("The post {} to the database is {}", newArticle.getTitle(), newArticle.isStar());
-
-        return articleRepository.findById(id)
-                .map(article -> {
-                    article.setStar(isStar);
-                    return articleRepository.save(article);
-                })
-                .orElseGet(() -> {
-                    newArticle.setStar(isStar);
-                    return articleRepository.save(newArticle);
-                });
+    public Article toggle(Article articleDb, boolean star) {
+        articleDb.setStar(star);
+        log.info("The post {} set {}", articleDb.getTitle(), star);
+        return articleRepository.save(articleDb);
     }
 
     public Article addNewArticle(Article article) {
@@ -67,18 +58,8 @@ public class ArticleService {
         return articleRepository.findById(id).orElseThrow();
     }
 
-    public Article updateArticle(Article newArticle, Long id) {
-
-        return articleRepository.findById(id)
-                .map(article -> {
-                    article.setTitle(newArticle.getTitle());
-                    article.setContent(newArticle.getContent());
-                    article.setStar(newArticle.isStar());
-                    return articleRepository.save(article);
-                })
-                .orElseGet(() -> {
-                    newArticle.setId(id);
-                    return articleRepository.save(newArticle);
-                });
+    public Article updateArticle(Article articleDb, Article article) {
+        BeanUtils.copyProperties(article, articleDb, "id");
+        return articleRepository.save(articleDb);
     }
 }

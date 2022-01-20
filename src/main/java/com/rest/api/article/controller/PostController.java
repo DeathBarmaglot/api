@@ -3,7 +3,6 @@ package com.rest.api.article.controller;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.service.ArticleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,9 +23,9 @@ public class PostController {
 
     @PutMapping("/{id}")
     public Article replaceArticle(
-            @PathVariable(value = "id") Long id,
+            @PathVariable(value = "id") Article articleDb,
             @RequestBody Article article) {
-        return articleService.updateArticle(article, id);
+        return articleService.updateArticle(articleDb, article);
     }
 
     @DeleteMapping("/{id}")
@@ -37,14 +36,14 @@ public class PostController {
 
     @PutMapping("/{id}/star")
     public Article editStar(
-            @PathVariable Long id) {
-        return articleService.toggle(id, true);
+            @PathVariable(value = "id") Article article) {
+        return articleService.toggle(article, true);
     }
 
     @DeleteMapping("/{id}/star")
     public Article deleteStar(
-            @PathVariable Long id) {
-        return articleService.toggle(id, false);
+            @PathVariable(value = "id") Article article) {
+        return articleService.toggle(article, false);
     }
 
     @GetMapping
@@ -53,6 +52,5 @@ public class PostController {
             @RequestParam Optional<String> title,
             @RequestParam Optional<Integer> page) {
         return articleService.filteredBy(sort, title, page);
-
     }
 }

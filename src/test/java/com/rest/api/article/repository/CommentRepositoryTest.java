@@ -36,15 +36,16 @@ class CommentRepositoryTest {
     @InjectMocks
     private final CommentRepository commentRepository = Mockito.mock(CommentRepository.class);
 
-    Article ARTICLE = new Article(1L, "Test", "add", true);
-    Comment COMMENT = new Comment(2L, "Comment", null, ARTICLE);
-    Comment COMMENT1 = new Comment(3L, "Comment2", null, ARTICLE);
+    Article ARTICLE = new Article("Post", "Test");
+    Article ARTICLE1 = new Article("Article", "New Test");
+
+    Comment COMMENT = new Comment(2L, "Comment", null,ARTICLE);
+    Comment COMMENT1 = new Comment(3L, "Comment2",null,ARTICLE);
 
 
     @Test
     public void TestFindByArticle() throws Exception {
-        List<Comment> listComment = commentRepository.findByArticle(ARTICLE, Sort.unsorted());
-        System.out.println(listComment);
+//        List<Comment> listComment = commentRepository.findByArticles(ARTICLE, Sort.unsorted());
 
         String uri = HOST + "/1/full";
         List<Comment> commentList = new ArrayList<>(Arrays.asList(COMMENT, COMMENT1));

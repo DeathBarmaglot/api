@@ -1,6 +1,5 @@
 package com.rest.api.article.entity;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +17,8 @@ import java.io.Serializable;
 public class Article implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonView(Views.Id.class)
     private Long id;
 
-    @JsonView(Views.IdTitle.class)
     @Column(name = "title", nullable = false)
     private String title;
 

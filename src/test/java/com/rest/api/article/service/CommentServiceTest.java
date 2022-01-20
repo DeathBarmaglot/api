@@ -46,10 +46,11 @@ class CommentServiceTest {
     private MockMvc mockMvc;
     private final String HOST = "/api/v1/posts";
 
-    Article ARTICLE = new Article(7L, "Post", "Test", true);
-    Article ARTICLE1 = new Article(1L, "Article", "New Test", false);
-    Comment COMMENT = new Comment(2L, "Comment", null, ARTICLE);
-    Comment COMMENT1 = new Comment(3L, "Comment2", null, ARTICLE);
+    Article ARTICLE = new Article("Post", "Test");
+    Article ARTICLE1 = new Article("Article", "New Test");
+
+    Comment COMMENT = new Comment(2L, "Comment", null,ARTICLE);
+    Comment COMMENT1 = new Comment(3L, "Comment2",null,ARTICLE);
 
     @InjectMocks
     private final ArticleRepository articleRepository = Mockito.mock(ArticleRepository.class);
@@ -113,8 +114,7 @@ class CommentServiceTest {
 
     @Test
     void getAllCommentsByPostId() throws Exception {
-        List<Comment> listComment = commentRepository.findByArticle(ARTICLE, Sort.unsorted());
-        System.out.println(listComment);
+//        List<Comment> listComment = commentRepository.findByArticles(ARTICLE, Sort.unsorted());
 
         String uri = HOST + "/1/full";
         List<Comment> commentList = new ArrayList<>(Arrays.asList(COMMENT, COMMENT1));

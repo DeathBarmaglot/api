@@ -35,7 +35,7 @@ class ArticleServiceTest {
     private ArticleService articleService = Mockito.mock(ArticleService.class);
     private CommentService commentService = Mockito.mock(CommentService.class);
 
-    Article ARTICLE = new Article(1L, "Test", "add", true);
+    Article ARTICLE = new Article("Test", "add");
 
 
     @Test

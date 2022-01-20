@@ -1,9 +1,7 @@
 package com.rest.api.article.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
-import com.rest.api.article.entity.Views;
 import com.rest.api.article.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +22,13 @@ public class CommentController {
     }
 
     @GetMapping("/{id}/comments")
-    @JsonView(Views.WithDate.class)
     public List<Comment> getAllCommentsByPostId(
             @PathVariable(value = "id") Article article) {
         return commentService.getAllCommentsByPostId(article);
     }
 
+    //TODO
     @GetMapping("/{postId}/comments/{commentId}")
-    @JsonView(Views.FullArticle.class)
     public Comment getCommentByPostId(
             @PathVariable(value = "postId") Article article,
             @PathVariable(value = "commentId") Comment comment) {
@@ -44,15 +41,15 @@ public class CommentController {
     }
 
     @GetMapping("/{postId}/full")
-    public List<Object> getFullCommentsByPostId(
-            @PathVariable(value = "postId") Long postId) {
-        return commentService.allCommentByPost(postId);
+    public List<Comment> getFullCommentsByPostId(
+            @PathVariable(value = "postId") Article article) {
+        return commentService.getAllCommentsByPostId(article);
     }
 
     @PostMapping("/{postId}/comments")
     public Comment addNewComment(
-            @PathVariable(value = "postId") Long articleId,
+            @PathVariable(value = "postId") Article article,
             @RequestBody Comment comment) {
-        return commentService.addNewComment(articleId, comment);
+        return commentService.addNewComment(article, comment);
     }
 }

@@ -19,17 +19,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
 
-    public Comment addNewComment(Long articleId, Comment comment) {
-        return articleRepository.findById(articleId).map(article -> {
-            comment.setArticle(article);
+    public Comment addNewComment(Article article, Comment comment) {
+        comment.setArticle(article);
             return commentRepository.save(comment);
-        }).orElseThrow(NotFoundException::new);
-    }
-
-    public List<Object> allCommentByPost(Long postId) {
-        Article article = articleRepository.findById(postId).orElseThrow(NotFoundException::new);
-        List<Comment> commentList = commentRepository.findByArticle(article, Sort.unsorted());
-        return List.of(article, commentList);
     }
 
     public List<Article> getByStar() {
