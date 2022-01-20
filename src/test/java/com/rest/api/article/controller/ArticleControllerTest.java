@@ -9,15 +9,9 @@ import com.rest.api.article.NotFoundException;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.repository.ArticleRepository;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -38,16 +32,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-public class PostControllerTest {
+public class ArticleControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
     private final String HOST = "/api/v1/posts";
 
-    @InjectMocks
     private final ArticleRepository articleRepository = Mockito.mock(ArticleRepository.class);
 
     Article ARTICLE = new Article("Test", "add");

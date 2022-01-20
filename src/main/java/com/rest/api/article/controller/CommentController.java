@@ -27,17 +27,11 @@ public class CommentController {
         return commentService.getAllCommentsByPostId(article);
     }
 
-    //TODO
     @GetMapping("/{postId}/comments/{commentId}")
     public Comment getCommentByPostId(
             @PathVariable(value = "postId") Article article,
             @PathVariable(value = "commentId") Comment comment) {
         return comment;
-    }
-
-    @GetMapping("/star")
-    public List<Article> getTop() {
-        return commentService.getByStar();
     }
 
     @GetMapping("/{postId}/full")

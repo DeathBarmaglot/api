@@ -11,7 +11,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/posts")
-public class PostController {
+public class ArticleController {
 
     private final ArticleService articleService;
 
@@ -47,10 +47,16 @@ public class PostController {
     }
 
     @GetMapping
-    public List<Object> filterBy(
-            @RequestParam Optional<String> sort,
+    public List<Article> filterBy(
             @RequestParam Optional<String> title,
+            @RequestParam Optional<String> sort,
             @RequestParam Optional<Integer> page) {
         return articleService.filteredBy(sort, title, page);
     }
+
+    @GetMapping("/star")
+    public List<Article> getTop() {
+        return articleService.getByStar();
+    }
+
 }

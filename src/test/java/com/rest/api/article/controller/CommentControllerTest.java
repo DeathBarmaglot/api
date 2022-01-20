@@ -30,11 +30,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-public class CommentControllerTest extends PostControllerTest {
+public class CommentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -97,38 +96,12 @@ public class CommentControllerTest extends PostControllerTest {
 
     @Test
     public void getFullCommentsByPostId() throws Exception {
-        String uri = HOST + "/5/comments";
-        Mockito.when(commentRepository.save(COMMENT)).thenReturn(COMMENT);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper(COMMENT));
-
-        mockMvc.perform(mockRequest)
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$.text", is("Test")));
     }
 
     @Test
     public void addNewComment() throws Exception {
-        String uri = HOST + "/7/comments";
-        Mockito.when(articleRepository.save(ARTICLE)).thenReturn(ARTICLE);
-        Mockito.when(commentRepository.save(COMMENT)).thenReturn(COMMENT);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper(COMMENT));
-
-        mockMvc.perform(mockRequest)
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.text", is("Comment")));
     }
 
     @Test
