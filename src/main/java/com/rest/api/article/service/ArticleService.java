@@ -48,13 +48,13 @@ public class ArticleService {
 
     public Article updateArticle(Article articleDb, Article article) {
         log.info("Updating article {} to the database", article.getTitle());
-        BeanUtils.copyProperties(article, articleDb, "id");
+        BeanUtils.copyProperties(article, articleDb, "id", "star", "comments");
         return articleRepository.save(articleDb);
     }
 
     public List<Article> filteredBy(Optional<String> sort, Optional<String> title, Optional<Integer> page) {
 
-        List<Article> result = null;
+        List<Article> result;
 
         if (title.isPresent()) {
             result = articleRepository.findByTitle(title.get());
@@ -68,7 +68,6 @@ public class ArticleService {
         } else {
             result = articleRepository.findAll();
         }
-
         return result;
     }
 }

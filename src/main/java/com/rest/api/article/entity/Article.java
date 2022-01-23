@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +28,10 @@ public class Article implements Serializable {
 
     @Column(name = "star")
     private boolean star = false;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
+    private List<Comment> comments;
 
     public Article(String title, String content) {
         this.title = title;

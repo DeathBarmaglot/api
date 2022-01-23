@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long comment_id;
 
     @Column(name = "text", nullable = false)
     private String text;
@@ -30,7 +30,4 @@ public class Comment implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Article article;
 }
