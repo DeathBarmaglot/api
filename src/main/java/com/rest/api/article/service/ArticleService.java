@@ -25,6 +25,11 @@ public class ArticleService {
         return articleRepository.findByStarTrue();
     }
 
+    public List<Article> getAll() {
+        log.info("Searching All articles");
+        return articleRepository.findAll();
+    }
+
     public void removeArticle(Article article) {
         log.info("Removing post {} to the database", article.getTitle());
         articleRepository.deleteAllById(Collections.singleton(article.getId()));
@@ -48,7 +53,7 @@ public class ArticleService {
 
     public Article updateArticle(Article articleDb, Article article) {
         log.info("Updating article {} to the database", article.getTitle());
-        BeanUtils.copyProperties(article, articleDb, "id", "star", "comments");
+        BeanUtils.copyProperties(article, articleDb, "id");
         return articleRepository.save(articleDb);
     }
 

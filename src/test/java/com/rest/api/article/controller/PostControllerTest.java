@@ -10,7 +10,11 @@ import com.rest.api.article.entity.Article;
 import com.rest.api.article.repository.ArticleRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -32,11 +36,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class ArticleControllerTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+public class PostControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
     private final String HOST = "/api/v1/posts";
 
+    @InjectMocks
     private final ArticleRepository articleRepository = Mockito.mock(ArticleRepository.class);
 
     Article ARTICLE = new Article("Test", "add");
@@ -82,7 +90,7 @@ public class ArticleControllerTest {
 
     @Test
     public void testAddStar() throws Exception {
-        mockMvc.perform(put(HOST + "/5/star")
+        this.mockMvc.perform(put(HOST + "/5/star")
                         .param("star", String.valueOf(true)))
                 .andDo(print())
                 .andExpect(status().is(200))
@@ -91,7 +99,7 @@ public class ArticleControllerTest {
 
     @Test
     public void testDeleteStar() throws Exception {
-        mockMvc.perform(delete(HOST + "/1/star")
+        this.mockMvc.perform(delete(HOST + "/1/star")
                         .param("star", String.valueOf(false)))
                 .andDo(print())
                 .andExpect(status().is(200))

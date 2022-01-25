@@ -1,42 +1,3 @@
-### Successful test: Add new comment
-POST http://localhost:8080/api/v1/posts/1/comments
-Content-Type: application/json
-
-{
-  "text": "Request executed successfully"
-}
-
-> {%
-client.test("Request executed successfully", function() {
-  client.assert(response.status === 200, "Response status is not 200");
-});
-
-client.test("Response content-type is json", function() {
-  var type = response.contentType.mimeType;
-  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
-});
-%}
-
-### Successful test: Add new comment
-POST http://localhost:8080/api/v1/posts/2/comments
-Content-Type: application/json
-
-{
-  "text": "Request executed successfully"
-}
-
-> {%
-client.test("Request executed successfully", function() {
-  client.assert(response.status === 200, "Response status is not 200");
-});
-
-client.test("Response content-type is json", function() {
-  var type = response.contentType.mimeType;
-  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
-});
-%}
-
-
 ### Successful test: Add new post
 POST http://localhost:8080/api/v1/posts
 Content-Type: application/json
@@ -44,46 +5,6 @@ Content-Type: application/json
 {
   "title": "News",
   "content": "Bad"
-}
-
-> {%
-client.test("Request executed successfully", function() {
-  client.assert(response.status === 200, "Response status is not 200");
-});
-
-client.test("Response content-type is json", function() {
-  var type = response.contentType.mimeType;
-  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
-});
-%}
-
-### Successful test: Add new post
-POST http://localhost:8080/api/v1/posts
-Content-Type: application/json
-
-{
-  "title": "News",
-  "content": "Bad"
-}
-
-> {%
-client.test("Request executed successfully", function() {
-  client.assert(response.status === 200, "Response status is not 200");
-});
-
-client.test("Response content-type is json", function() {
-  var type = response.contentType.mimeType;
-  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
-});
-%}
-
-### Successful test: Add new post
-POST http://localhost:8080/api/v1/posts
-Content-Type: application/json
-
-{
-  "title": "News",
-  "content": "Good"
 }
 
 > {%
@@ -231,7 +152,7 @@ client.test("Request executed successfully", function() {
 %}
 
 ###
-PUT http://localhost:8080/api/v1/posts/2
+PUT http://localhost:8080/api/v1/posts/10
 Content-Type: application/json
 
 {
@@ -246,7 +167,7 @@ client.test("Request executed successfully", function() {
 %}
 
 ###
-DELETE http://localhost:8080/api/v1/posts/3
+DELETE http://localhost:8080/api/v1/posts/6
 
 > {%
 client.test("Request executed successfully", function() {
@@ -259,7 +180,7 @@ GET http://localhost:8080/api/v1/posts
 Content-Type: application/json
 
 ### Successful test: Get post 20
-GET http://localhost:8080/api/v1/posts/2
+GET http://localhost:8080/api/v1/posts/5
 Content-Type: application/json
 
 > {%
@@ -274,7 +195,7 @@ client.test("Response content-type is json", function() {
 %}
 
 ### Successful test: Get comments by post 5
-GET http://localhost:8080/api/v1/posts/2/comments
+GET http://localhost:8080/api/v1/posts/5/comments
 Content-Type: application/json
 
 > {%
@@ -289,7 +210,7 @@ client.test("Response content-type is json", function() {
 %}
 
 ### Successful test: Get post 20 with comment 30
-GET http://localhost:8080/api/v1/posts/1/comments/2
+GET http://localhost:8080/api/v1/posts/5/comments/12
 Content-Type: application/json
 
 > {%
@@ -304,7 +225,7 @@ client.test("Response content-type is json", function() {
 %}
 
 ### Successful test: Add new comment
-POST http://localhost:8080/api/v1/posts/2/comments
+POST http://localhost:8080/api/v1/posts/5/comments
 Content-Type: application/json
 
 {
@@ -323,7 +244,7 @@ client.test("Response content-type is json", function() {
 %}
 
 ### Successful test: Get post 1 with all comments
-GET http://localhost:8080/api/v1/posts/2/full
+GET http://localhost:8080/api/v1/posts/5/full
 Content-Type: application/json
 
 > {%

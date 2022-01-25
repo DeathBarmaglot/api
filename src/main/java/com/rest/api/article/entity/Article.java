@@ -1,14 +1,12 @@
 package com.rest.api.article.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Builder
 @Entity
 @Getter
 @Setter
@@ -17,7 +15,7 @@ import java.util.List;
 @Table(name = "articles")
 public class Article implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "title", nullable = false)
@@ -29,7 +27,7 @@ public class Article implements Serializable {
     @Column(name = "star")
     private boolean star = false;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private List<Comment> comments;
 

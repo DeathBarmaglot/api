@@ -24,27 +24,28 @@ public class CommentController {
     @GetMapping("/{id}/comments")
     public List<Comment> getAllCommentsByPostId(
             @PathVariable(value = "id") Article articleDb) {
-        return articleDb.getComments();
+        return commentService.getAllCommentsByPostId(articleDb);
     }
 
     @GetMapping("/{postId}/comments/{commentId}")
     public Comment getCommentByPostId(
-            @PathVariable(value = "postId") Article articleDb,
-            @PathVariable(value = "commentId") Long comment_id) {
-        return commentService.getById(comment_id);
+            @PathVariable(value = "postId") Article article,
+            @PathVariable(value = "commentId") Comment comment) {
+        return comment;
     }
 
     @GetMapping("/{postId}/full")
     public List<Comment> getFullCommentsByPostId(
-            @PathVariable(value = "postId") Article articleDb) {
-        return articleDb.getComments();
+            @PathVariable(value = "postId") Article article) {
+        return commentService.getAllCommentsByPostId(article);
     }
 
     @PostMapping("/{postId}/comments")
-    public Article addNewComment(
+    public Comment addNewComment(
             @PathVariable(value = "postId") Article article,
             @RequestBody Comment comment) {
-        Article savedComment = commentService.addNewComment(article, comment);
+        Comment savedComment = commentService.addNewComment(article, comment);
         return savedComment;
     }
+
 }
