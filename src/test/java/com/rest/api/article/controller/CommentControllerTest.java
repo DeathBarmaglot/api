@@ -3,6 +3,7 @@ package com.rest.api.article.controller;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.ArticleRepository;
+import com.rest.api.article.repository.CommentRepository;
 import com.rest.api.article.service.ArticleService;
 import com.rest.api.article.service.CommentService;
 import org.junit.jupiter.api.Test;
@@ -36,10 +37,11 @@ public class CommentControllerTest {
     private ArticleService articleService;
     @Mock
     private ArticleRepository articleRepository;
+    private CommentRepository commentRepository;
 
     @Test
     void findBy() throws Exception {
-        articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
         Comment COMMENT = Comment.builder().comment_id(1L).text("Comment").build();
         Comment COMMENT2 = Comment.builder().comment_id(2L).text("Comment2").build();
         List<Comment> comments = Arrays.asList(COMMENT, COMMENT2);

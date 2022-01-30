@@ -32,8 +32,8 @@ public class Comment implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Article article;
 
-    public Comment(Long comment_id, String text) {
-        this.comment_id = comment_id;
-        this.text = text;
-    }
+//    @JoinColumn(name = "user_id")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    private User user;
 }

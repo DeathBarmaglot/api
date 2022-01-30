@@ -2,6 +2,7 @@ package com.rest.api.article.service;
 
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.repository.ArticleRepository;
+import com.rest.api.article.repository.CommentRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +21,11 @@ class ArticleServiceTest {
 
     @Mock
     private ArticleRepository articleRepository;
+    private CommentRepository commentRepository;
 
     @Test
     void getByStar() {
-        ArticleService articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
 
         Article article_mock = Article.builder().id(1L).title("Post").content("Test").star(true).build();
         Article article_mock2 = Article.builder().id(2L).title("Post").content("Test").star(false).build();
@@ -46,7 +48,7 @@ class ArticleServiceTest {
     @Test
     @DisplayName("Get All Articles Test")
     void getAll() {
-        ArticleService articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
 
         Article article_mock = Article.builder().id(1L).title("Post").content("Test").build();
         Article article_mock1 = Article.builder().id(2L).title("Article").content("New Test").build();
@@ -61,7 +63,7 @@ class ArticleServiceTest {
     @Test
     @DisplayName("Remove Article Test")
     void removeArticle() {
-        ArticleService articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
         Article article_mock = Article.builder().id(1L).title("Post").content("Test").build();
         articleService.removeArticle(article_mock);
         List<Article> actual = articleService.getAll();
@@ -73,7 +75,7 @@ class ArticleServiceTest {
     @Test
     @DisplayName("Toggle Star False To True")
     void toggleFalseToTrue() {
-        ArticleService articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
         Article article_mock = Article.builder().id(1L).title("Post").content("Test").star(false).build();
 
         Optional<Article> optionalArticle = Optional.of(article_mock);
@@ -92,7 +94,7 @@ class ArticleServiceTest {
     @Test
     @DisplayName("Toggle Star True To False")
     void toggleTrueToFalse() {
-        ArticleService articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
         Article article_mock = Article.builder().id(1L).title("Post").content("Test").star(true).build();
 
         Optional<Article> optionalArticle = Optional.of(article_mock);
@@ -111,7 +113,7 @@ class ArticleServiceTest {
     @Test
     @DisplayName("Add new Article Test")
     void addNewArticle() {
-        ArticleService articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
         Article article_mock = Article.builder().id(1L).title("Post").content("Test").build();
         Optional<Article> optionalArticle = Optional.of(article_mock);
         articleService.addNewArticle(article_mock);
@@ -126,7 +128,7 @@ class ArticleServiceTest {
     @Test
     @DisplayName("Get Article By Id Test")
     void getArticle() {
-        ArticleService articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
         Article article_mock = Article.builder().id(1L).title("Post").content("Test").build();
         Optional<Article> optionalArticle = Optional.of(article_mock);
         when(articleRepository.findById(article_mock.getId())).thenReturn(optionalArticle);
@@ -136,8 +138,9 @@ class ArticleServiceTest {
     }
 
     @Test
+    @DisplayName("Update Article Test")
     void updateArticle() {
-        ArticleService articleService = new ArticleService(articleRepository);
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
         Article article_mock = Article.builder().id(1L).title("Post").content("Test").build();
         Article article_mock2 = Article.builder().id(2L).title("Post").content("New Test").build();
 

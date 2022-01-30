@@ -29,23 +29,22 @@ public class CommentController {
 
     @GetMapping("/{postId}/comments/{commentId}")
     public Comment getCommentByPostId(
-            @PathVariable(value = "postId") Article article,
-            @PathVariable(value = "commentId") Comment comment) {
-        return comment;
-    }
-
-    @GetMapping("/{postId}/full")
-    public List<Comment> getFullCommentsByPostId(
-            @PathVariable(value = "postId") Article article) {
-        return commentService.getAllCommentsByPostId(article);
+            @PathVariable(value = "postId") Long postId,
+            @PathVariable(value = "commentId") Long commentId) {
+        return commentService.getCommentByPostId(postId, commentId);
     }
 
     @PostMapping("/{postId}/comments")
     public Comment addNewComment(
             @PathVariable(value = "postId") Article article,
             @RequestBody Comment comment) {
-        Comment savedComment = commentService.addNewComment(article, comment);
-        return savedComment;
+        return commentService.addNewComment(article, comment);
     }
 
+    @DeleteMapping("/{postId}/comments/{commentId}")
+    public Comment removeCommentById(
+            @PathVariable(value = "postId") Article article,
+            @PathVariable(value = "commentId") Comment comment) {
+        return commentService.removeComment(article, comment);
+    }
 }

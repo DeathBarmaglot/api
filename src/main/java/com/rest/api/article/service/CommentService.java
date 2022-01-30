@@ -19,13 +19,22 @@ public class CommentService {
     public Comment addNewComment(Article articleDb, Comment comment) {
         BeanUtils.copyProperties(articleDb, articleDb, "comment");
         comment.setArticle(articleDb);
-
-        Comment commentSaved = commentRepository.save(comment);
-        return commentSaved;
+        return commentRepository.save(comment);
     }
 
     public List<Comment> getAllCommentsByPostId(Article article) {
         return commentRepository.findByArticle(article, Sort.unsorted());
     }
 
+    public Comment removeComment(Article article, Comment comment) {
+        List<Comment> comments = article.getComments();
+        comments.remove(comment);
+        article.setComments(comments);
+        commentRepository.delete(comment);
+        return comment;
+    }
+
+    public Comment getCommentByPostId(Long articleId, Long commentId) {
+        return commentRepository.findCommentByArticle(articleId, commentId);
+    }
 }

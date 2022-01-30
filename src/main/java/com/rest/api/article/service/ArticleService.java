@@ -1,7 +1,9 @@
 package com.rest.api.article.service;
 
 import com.rest.api.article.entity.Article;
+import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.ArticleRepository;
+import com.rest.api.article.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +22,7 @@ import java.util.Optional;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
 
     public List<Article> getByStar() {
         log.info("Searching top articles");
@@ -74,5 +78,26 @@ public class ArticleService {
             result = articleRepository.findAll();
         }
         return result;
+    }
+
+    public List<Article> getPostsWithComments() {
+        List<Article> articleDb = articleRepository.findAll();
+        List<Article> articles = new ArrayList<>();
+        articleDb.forEach(article ->
+                articles.add(Article.builder()
+                        .id(article.getId())
+                        .title(article.getTitle())
+                        .content(article.getContent())
+                        .star(article.isStar())
+                        .comments(mapper(article))
+                        .tags(article.getTags())
+                        .build()));
+        return articles;
+    }
+
+    private List<Comment> mapper(Article article) {
+        List<Comment> comments = commentRepository.findByArticle(article, Sort.unsorted());
+        BeanUtils.copyProperties(comments, comments, "article");
+        return comments;
     }
 }

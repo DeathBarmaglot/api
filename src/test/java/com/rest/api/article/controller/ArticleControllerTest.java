@@ -39,7 +39,7 @@ public class ArticleControllerTest {
 
     private final ArticleRepository articleRepository = Mockito.mock(ArticleRepository.class);
 
-    Article ARTICLE = new Article("Test", "add");
+    Article ARTICLE = Article.builder().id(1L).title("Post").content("Test").star(true).build();
 
     @Test
     public void testAddNewArticle() {
@@ -55,7 +55,7 @@ public class ArticleControllerTest {
     public void testUpdateArticle() throws Exception {
 
         String uri = HOST + "/1";
-        Article newArticle = new Article("Test", "add");
+        Article newArticle = Article.builder().id(1L).title("Post").content("Test").star(true).build();
         Mockito.when(articleRepository.save(newArticle)).thenReturn(newArticle);
 
         Mockito.when(articleRepository.findById(ARTICLE.getId())).thenReturn(Optional.of(ARTICLE));
@@ -149,7 +149,7 @@ public class ArticleControllerTest {
 
     @Test
     public void testCreateArticle_success() throws Exception {
-        Article post = new Article("Test", "add");
+        Article post = Article.builder().id(1L).title("Post").content("Test").star(true).build();
         Mockito.when(articleRepository.save(post)).thenReturn(post);
 
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post(HOST)
