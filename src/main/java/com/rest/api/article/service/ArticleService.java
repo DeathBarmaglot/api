@@ -1,5 +1,6 @@
 package com.rest.api.article.service;
 
+import com.rest.api.article.dto.PostWithoutCommentDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.ArticleRepository;
@@ -61,7 +62,7 @@ public class ArticleService {
         return articleRepository.save(articleDb);
     }
 
-    public List<Article> filteredBy(Optional<String> sort, Optional<String> title, Optional<Integer> page) {
+    public List<PostWithoutCommentDto> filteredBy(Optional<String> sort, Optional<String> title, Optional<Integer> page) {
 
         List<Article> result;
 
@@ -76,8 +77,21 @@ public class ArticleService {
 
         } else {
             result = articleRepository.findAll();
+            log.info("Searching all articles in the database");
         }
-        return result;
+        List<PostWithoutCommentDto> dtoList = new ArrayList<>();
+        result.forEach(article -> dtoList.add(dtoMapper(article)));
+        return dtoList;
+    }
+
+    private PostWithoutCommentDto dtoMapper(Article article) {
+        PostWithoutCommentDto postWithoutCommentDto = new PostWithoutCommentDto();
+        postWithoutCommentDto.setId(article.getId());
+        postWithoutCommentDto.setTitle(article.getTitle());
+        postWithoutCommentDto.setContent(article.getContent());
+        postWithoutCommentDto.setStar(article.isStar());
+        postWithoutCommentDto.setHasgtags(article.getHashtags());
+        return postWithoutCommentDto;
     }
 
     public List<Article> getPostsWithComments() {
@@ -90,7 +104,7 @@ public class ArticleService {
                         .content(article.getContent())
                         .star(article.isStar())
                         .comments(mapper(article))
-                        .tags(article.getTags())
+                        .hashtags(article.getHashtags())
                         .build()));
         return articles;
     }

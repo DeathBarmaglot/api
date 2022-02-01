@@ -1,9 +1,9 @@
 ### Successful test: Add new user
-POST http://localhost:8080/api/v1/users
+POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "username": "Vasya",
+  "username": "John",
   "email": "doe@i.ua",
   "password": "123"
 }
@@ -39,6 +39,46 @@ client.test("Response content-type is json", function() {
   client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
 });
 %}
+
+
+### Successful test: Add new tags
+POST http://localhost:8080/api/v1/posts/1/tags
+Content-Type: application/json
+
+{
+  "hashtag": "TV"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+
+client.test("Response content-type is json", function() {
+  var type = response.contentType.mimeType;
+  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+});
+%}
+
+### Successful test: Add new tags
+POST http://localhost:8080/api/v1/posts/1/tags
+Content-Type: application/json
+
+{
+  "hashtag": "book"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+
+client.test("Response content-type is json", function() {
+  var type = response.contentType.mimeType;
+  client.assert(type === "application/json", "Expected 'application/json' but received '" + type + "'");
+});
+%}
+
 
 ### Successful test: Add new comment
 POST http://localhost:8080/api/v1/posts/1/comments

@@ -1,4 +1,6 @@
 spring:
+  main:
+    banner_mode: off
   datasource:
     url: jdbc:postgresql://ec2-44-193-111-218.compute-1.amazonaws.com:5432/d50vsr124snblf
     username: svqyiqncrxxfam
@@ -10,6 +12,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        #format_sql: true
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
@@ -19,5 +22,5 @@ logging:
   level:
     org:
       hibernate:
-        SQL: debug
-        type: trace
+#        SQL: debug
+#        type: trace

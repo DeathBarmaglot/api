@@ -1,0 +1,10 @@
+<dataset>
+    <User user_id="100" username="John" email="doe@i.ua"/>
+    <User user_id="101" username="Mike" email="d@i.ua"/>
+    <User user_id="102" username="Kevin" email="d@i.ua"/>
+
+    <Article article_id="10" title="Post" content="Test" user_id="100"/>
+    <Article article_id="11" title="New Post" content="Test" user_id="100"/>
+    <Article article_id="12" title="Post News" content="Test New" user_id="101"/>
+    <Article article_id="13" title="Guardian" content="New Test" user_id="102"/>
+</dataset>

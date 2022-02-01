@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.rest.api.article.NotFoundException;
 import com.rest.api.article.entity.Article;
+import com.rest.api.article.entity.User;
 import com.rest.api.article.repository.ArticleRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -47,7 +48,7 @@ public class PostControllerTest {
     @InjectMocks
     private final ArticleRepository articleRepository = Mockito.mock(ArticleRepository.class);
 
-    Article ARTICLE = new Article(1L,"Test", "add",true,null,null);;
+    Article ARTICLE = new Article(1L,"Test", "add",false,null,null);
 
     @Test
     public void testAddNewArticle() {
@@ -63,7 +64,7 @@ public class PostControllerTest {
     public void testUpdateArticle() throws Exception {
 
         String uri = HOST + "/1";
-        Article newArticle = new Article(1L,"Test", "add",true,null,null);
+        Article newArticle = new Article(1L,"Test", "add",false,null,null);
         Mockito.when(articleRepository.save(newArticle)).thenReturn(newArticle);
 
         Mockito.when(articleRepository.findById(ARTICLE.getId())).thenReturn(Optional.of(ARTICLE));
@@ -157,7 +158,7 @@ public class PostControllerTest {
 
     @Test
     public void testCreateArticle_success() throws Exception {
-        Article newArticle = new Article(1L,"Test", "add",true,null,null);
+        Article newArticle = new Article(1L,"Test", "add",false,null,null);
 
         Mockito.when(articleRepository.save(newArticle)).thenReturn(newArticle);
 

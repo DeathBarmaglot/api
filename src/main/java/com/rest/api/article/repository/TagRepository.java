@@ -10,6 +10,8 @@ import java.util.Map;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
-    @Query("select t from Tag t where t.hash = ?1")
-    Map<String, Article> findAllArticlesByAndHash();
+    @Query("select t from Tag t where t.hashtag = ?1")
+    Map<String, Article> findAllArticlesByHashtag();
+
+//    Map<String, Article> findAllByArticlesAndHashtag();
 }

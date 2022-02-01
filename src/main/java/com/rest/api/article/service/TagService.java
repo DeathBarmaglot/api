@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -23,30 +20,38 @@ public class TagService {
 
     public Set<Tag> getAll(Article article) {
         log.info("Searching All tags");
-        return article.getTags();
+        return article.getHashtags();
     }
 
     public Tag addNewTag(Article articleDb, Tag tag) {
-        Set<Tag> tags = articleDb.getTags();
+        Set<Tag> tags = articleDb.getHashtags();
         tags.add(tag);
-        articleDb.setTags(tags);
+        articleDb.setHashtags(tags);
         log.info("Adding New tag");
-        return tagRepository.save(tag);
-    }
-
-    public Tag removeTag(Article article, Tag tag) {
-        Set<Tag> tags = article.getTags();
-        tags.remove(tag);
-        article.setTags(tags);
-        articleRepository.save(article);
-        log.info("Removing tag {}", tag.getHash());
+        tagRepository.save(tag);
         return tag;
     }
 
-    public Map<String, Article> ArticlesByTags() {
-        Set<Article> taggedArticle = new HashSet<>();
-        List<Tag> tags = tagRepository.findAll();
-        Map<String, Article> articleMap =  tagRepository.findAllArticlesByAndHash();
-        return articleMap;
+    public Tag removeTag(Article article, Tag tag) {
+        Set<Tag> tags = article.getHashtags();
+        tags.remove(tag);
+        article.setHashtags(tags);
+        articleRepository.save(article);
+        log.info("Removing tag {}", tag.getHashtag());
+        return tag;
+    }
+
+    public Map<String, Article> getArticlesByTags(List<String> responseTags) {
+        if (!responseTags.isEmpty()){
+            Map<String, Article> tags = new HashMap<>();
+            responseTags.forEach(tag -> tags.put(tag, findBy(tag)));
+            return tags;
+        } else {
+            return tagRepository.findAllArticlesByHashtag();
+        }
+    }
+
+    private Article findBy(String tag) {
+        return articleRepository.findByHashtags(tag);
     }
 }

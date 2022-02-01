@@ -1,5 +1,6 @@
 package com.rest.api.article.controller;
 
+import com.rest.api.article.dto.PostWithoutCommentDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.repository.CommentRepository;
 import com.rest.api.article.service.ArticleService;
@@ -50,7 +51,7 @@ public class ArticleController {
     }
 
     @GetMapping
-    public List<Article> filterBy(
+    public List<PostWithoutCommentDto> filterBy(
             @RequestParam Optional<String> title,
             @RequestParam Optional<String> sort,
             @RequestParam Optional<Integer> page) {

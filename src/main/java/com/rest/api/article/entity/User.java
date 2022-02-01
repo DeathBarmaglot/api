@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Entity
@@ -18,7 +19,8 @@ import java.util.List;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long user_id;
+    @Column(name="user_id")
+    private Long id;
 
     private String username;
 
@@ -33,11 +35,11 @@ public class User implements Serializable {
 
     private Boolean enabled = false;
 
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private List<Article> articles;
-//
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private List<Comment> comments;
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<Article> articles;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Comment> comments;
 }

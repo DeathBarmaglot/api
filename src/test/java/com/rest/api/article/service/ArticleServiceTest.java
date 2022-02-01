@@ -1,5 +1,6 @@
 package com.rest.api.article.service;
 
+import com.rest.api.article.dto.PostWithoutCommentDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.CommentRepository;
@@ -24,6 +25,7 @@ class ArticleServiceTest {
     private CommentRepository commentRepository;
 
     @Test
+    @DisplayName("Get All Top Articles By Stars Test")
     void getByStar() {
         ArticleService articleService = new ArticleService(articleRepository,commentRepository);
 
@@ -133,7 +135,9 @@ class ArticleServiceTest {
         Optional<Article> optionalArticle = Optional.of(article_mock);
         when(articleRepository.findById(article_mock.getId())).thenReturn(optionalArticle);
 
-        articleService.getArticle(article_mock.getId());
+        Article actual = articleService.getArticle(article_mock.getId());
+
+        assertEquals(article_mock.getId(), actual.getId());
         verify(articleRepository, times(1)).findById(1L);
     }
 
@@ -155,5 +159,22 @@ class ArticleServiceTest {
         assertEquals(article_mock2.getContent(), actual.getContent());
 
         verify(articleRepository, times(1)).save(article_mock);
+    }
+
+    @Test
+    void filteredByTitle() {
+        ArticleService articleService = new ArticleService(articleRepository,commentRepository);
+
+        Article article_mock = Article.builder().id(1L).title("Post").content("Test").build();
+        Article article_mock1 = Article.builder().id(2L).title("Article").content("New Test").build();
+        Article article_mock2 = Article.builder().id(2L).title("Article").content("New Test").build();
+        List<Article> listArticle = List.of(article_mock1, article_mock, article_mock2);
+        Optional<String> sort = Optional.of("");
+        Optional<Integer> page = Optional.of(0);
+
+        when(articleRepository.findByTitle(article_mock1.getTitle())).thenReturn(Collections.singletonList(article_mock1));
+        List<PostWithoutCommentDto> actual = articleService.filteredBy(sort, Optional.ofNullable(article_mock1.getTitle()), page);
+        assertEquals(listArticle.get(0), actual.get(0));
+        verify(articleRepository, times(1)).findByTitle(article_mock1.getTitle());
     }
 }

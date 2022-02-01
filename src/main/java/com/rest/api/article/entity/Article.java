@@ -43,7 +43,7 @@ public class Article implements Serializable {
             inverseJoinColumns = {
                     @JoinColumn(name = "tag_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
-    private Set<Tag> tags = new HashSet<>();
+    private Set<Tag> hashtags = new HashSet<>();
 
 //    @JoinColumn(name = "user_id")
 //    @OnDelete(action = OnDeleteAction.CASCADE)

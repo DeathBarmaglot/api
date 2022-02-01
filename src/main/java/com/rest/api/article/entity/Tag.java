@@ -20,7 +20,7 @@ public class Tag implements Serializable {
     private Long id;
 
     @Column(name = "tag")
-    private String hash;
+    private String hashtag;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Article> articles = new HashSet<>();

@@ -1,5 +1,6 @@
 package com.rest.api.article.controller;
 
+import com.rest.api.article.dto.CommentWithoutPostDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
 import com.rest.api.article.service.CommentService;
@@ -22,16 +23,16 @@ public class CommentController {
     }
 
     @GetMapping("/{id}/comments")
-    public List<Comment> getAllCommentsByPostId(
+    public List<CommentWithoutPostDto> getAllCommentsByPostId(
             @PathVariable(value = "id") Article articleDb) {
         return commentService.getAllCommentsByPostId(articleDb);
     }
 
     @GetMapping("/{postId}/comments/{commentId}")
-    public Comment getCommentByPostId(
-            @PathVariable(value = "postId") Long postId,
-            @PathVariable(value = "commentId") Long commentId) {
-        return commentService.getCommentByPostId(postId, commentId);
+    public CommentWithoutPostDto getCommentByPostId(
+            @PathVariable(value = "postId") Article article,
+            @PathVariable(value = "commentId") Comment comment) {
+        return commentService.getCommentByPost(article, comment);
     }
 
     @PostMapping("/{postId}/comments")
