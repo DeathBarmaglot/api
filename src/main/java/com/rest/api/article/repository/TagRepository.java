@@ -13,5 +13,4 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     @Query("select t from Tag t where t.hashtag = ?1")
     Map<String, Article> findAllArticlesByHashtag();
 
-//    Map<String, Article> findAllByArticlesAndHashtag();
 }

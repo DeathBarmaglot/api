@@ -1,5 +1,7 @@
 package com.rest.api.article.service;
 
+import com.rest.api.article.dto.CommentWithoutPostDto;
+import com.rest.api.article.dto.PostWithCommentsDto;
 import com.rest.api.article.dto.PostWithoutCommentDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
@@ -62,7 +64,10 @@ public class ArticleService {
         return articleRepository.save(articleDb);
     }
 
-    public List<PostWithoutCommentDto> filteredBy(Optional<String> sort, Optional<String> title, Optional<Integer> page) {
+    public List<PostWithoutCommentDto> filteredBy(
+            Optional<String> sort,
+            Optional<String> title,
+            Optional<Integer> page) {
 
         List<Article> result;
 
@@ -79,39 +84,49 @@ public class ArticleService {
             result = articleRepository.findAll();
             log.info("Searching all articles in the database");
         }
-        List<PostWithoutCommentDto> dtoList = new ArrayList<>();
-        result.forEach(article -> dtoList.add(dtoMapper(article)));
-        return dtoList;
+
+        List<PostWithoutCommentDto> postWithoutCommentDtoList = new ArrayList<>();
+
+        result.forEach(article ->
+                postWithoutCommentDtoList.add(dtoArticleMapper(article)));
+
+        return postWithoutCommentDtoList;
     }
 
-    private PostWithoutCommentDto dtoMapper(Article article) {
+    private PostWithoutCommentDto dtoArticleMapper(Article article) {
         PostWithoutCommentDto postWithoutCommentDto = new PostWithoutCommentDto();
-        postWithoutCommentDto.setId(article.getId());
-        postWithoutCommentDto.setTitle(article.getTitle());
-        postWithoutCommentDto.setContent(article.getContent());
-        postWithoutCommentDto.setStar(article.isStar());
-        postWithoutCommentDto.setHasgtags(article.getHashtags());
+        BeanUtils.copyProperties(article, postWithoutCommentDto, "comment");
         return postWithoutCommentDto;
     }
 
-    public List<Article> getPostsWithComments() {
+    public List<PostWithCommentsDto> getFullArticle() {
         List<Article> articleDb = articleRepository.findAll();
-        List<Article> articles = new ArrayList<>();
+        List<PostWithCommentsDto> all = new ArrayList<>();
+
         articleDb.forEach(article ->
-                articles.add(Article.builder()
-                        .id(article.getId())
-                        .title(article.getTitle())
-                        .content(article.getContent())
-                        .star(article.isStar())
-                        .comments(mapper(article))
-                        .hashtags(article.getHashtags())
-                        .build()));
-        return articles;
+                all.add(putPost(article)));
+        return all;
     }
 
-    private List<Comment> mapper(Article article) {
+    protected PostWithCommentsDto putPost(Article article) {
+        PostWithCommentsDto post = new PostWithCommentsDto();
+        BeanUtils.copyProperties(article, post, "comment");
+        post.setComments(fetch(article));
+        return post;
+    }
+
+    private List<CommentWithoutPostDto> fetch(Article article) {
+        List<CommentWithoutPostDto> commentWithoutPostDtoList = new ArrayList<>();
         List<Comment> comments = commentRepository.findByArticle(article, Sort.unsorted());
-        BeanUtils.copyProperties(comments, comments, "article");
-        return comments;
+
+        comments.forEach(comment -> commentWithoutPostDtoList.add(dtoCommentMapper(comment)));
+
+        return commentWithoutPostDtoList;
+    }
+
+    private CommentWithoutPostDto dtoCommentMapper(Comment comment) {
+        CommentWithoutPostDto commentWithoutPostDto = new CommentWithoutPostDto();
+        BeanUtils.copyProperties(comment, commentWithoutPostDto, "article");
+        return commentWithoutPostDto;
     }
 }

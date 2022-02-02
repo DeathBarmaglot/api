@@ -15,7 +15,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findByTitle(String title);
 
     List<Article> findByStarTrue();
-    @EntityGraph(attributePaths = { "hashtags" })
+
+    @EntityGraph(attributePaths = {"hashtags"})
     Article findByHashtags(String tag);
 
     @Override

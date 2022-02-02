@@ -1,8 +1,6 @@
 package com.rest.api.article.entity;
 
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -46,7 +44,6 @@ public class Article implements Serializable {
     private Set<Tag> hashtags = new HashSet<>();
 
 //    @JoinColumn(name = "user_id")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
 //    @ManyToOne(fetch = FetchType.LAZY, optional = false)
 //    private User user;
 

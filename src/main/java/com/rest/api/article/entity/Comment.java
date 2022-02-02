@@ -31,9 +31,4 @@ public class Comment implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Article article;
-
-//    @JoinColumn(name = "user_id")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    private User user;
 }

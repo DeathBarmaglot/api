@@ -4,10 +4,8 @@ import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Tag;
 import com.rest.api.article.service.TagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +14,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/posts")
 public class TagController {
+
     private final TagService tagService;
 
     @GetMapping("/{id}/tags")
@@ -37,21 +36,21 @@ public class TagController {
             @PathVariable(value = "tagId") Tag tag) {
         return tagService.removeTag(article, tag);
     }
-    //TODO http://localhost:8080/api/v1/posts/1/tags?id=8&id=9
+
     @GetMapping("/tags")
     @ResponseBody
     public Map<String, Article> getAllTaggedArticles(
             @RequestParam List<String> tag) {
-      return tagService.getArticlesByTags(tag);
+        return tagService.getArticlesByTags(tag);
     }
 
     @GetMapping("/{id}/tags/{tagId}")
     public Tag getTagById(
             @PathVariable(value = "id") Article articleDb,
             @PathVariable(value = "tagId") Tag tag) {
-        Article article = new Article();
-        BeanUtils.copyProperties(articleDb, article, "hashtags");
-        tag.setArticles(Collections.singleton(article));
-        return tag;
+        return tagService.getTags(articleDb, tag);
     }
 }
+
+//TODO Filter & sort
+// http://localhost:8080/api/v1/posts/1/tags?id=8&id=9

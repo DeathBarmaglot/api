@@ -18,5 +18,5 @@ public class PostWithoutCommentDto {
 
     private boolean star;
 
-    private Set<Tag> hasgtags;
+    private Set<Tag> hashtags;
 }

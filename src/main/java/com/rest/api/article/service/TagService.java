@@ -6,6 +6,7 @@ import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -53,5 +54,12 @@ public class TagService {
 
     private Article findBy(String tag) {
         return articleRepository.findByHashtags(tag);
+    }
+
+    public Tag getTags(Article articleDb, Tag tag) {
+        Article article = new Article();
+        BeanUtils.copyProperties(articleDb, article, "hashtags");
+        tag.setArticles(Collections.singleton(article));
+        return tag;
     }
 }

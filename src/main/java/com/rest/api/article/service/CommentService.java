@@ -1,6 +1,7 @@
 package com.rest.api.article.service;
 
 import com.rest.api.article.dto.CommentWithoutPostDto;
+import com.rest.api.article.dto.PostWithCommentsDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.CommentRepository;
@@ -27,7 +28,7 @@ public class CommentService {
     public List<CommentWithoutPostDto> getAllCommentsByPostId(Article article) {
         List<Comment> comments = commentRepository.findByArticle(article, Sort.unsorted());
         List<CommentWithoutPostDto> result = new ArrayList<>();
-        comments.forEach(comment -> result.add(dtoMapper(comment)));
+        comments.forEach(comment -> result.add(dtoCommentMapper(comment)));
         return result;
     }
 
@@ -40,37 +41,32 @@ public class CommentService {
     }
 
     public CommentWithoutPostDto getCommentByPost(Article article, Comment comment) {
-        return dtoMapper(comment);
+        return dtoCommentMapper(comment);
     }
 
-    private CommentWithoutPostDto dtoMapper(Comment comment) {
+    private CommentWithoutPostDto dtoCommentMapper(Comment comment) {
         CommentWithoutPostDto commentWithoutPostDto = new CommentWithoutPostDto();
-        commentWithoutPostDto.setComment_id(comment.getComment_id());
-        commentWithoutPostDto.setText(comment.getText());
-        commentWithoutPostDto.setCreatedAt(comment.getCreatedAt());
+        BeanUtils.copyProperties(comment, commentWithoutPostDto, "article");
         return commentWithoutPostDto;
     }
-}
+
+    public PostWithCommentsDto getArticleWithComments(Article article) {
+            PostWithCommentsDto postWithCommentsDto = new PostWithCommentsDto();
+
+        BeanUtils.copyProperties(article, postWithCommentsDto, "comments");
+        List<CommentWithoutPostDto> commentWithoutPostDtoList = new ArrayList<>();
+            List<Comment> comments = mapper(article);
+            comments.forEach(comment -> commentWithoutPostDtoList.add(dtoCommentMapper(comment)));
+            postWithCommentsDto.setComments(commentWithoutPostDtoList);
+            return postWithCommentsDto;
+        }
+
+        private List<Comment> mapper(Article article) {
+            List<Comment> comments = commentRepository.findByArticle(article, Sort.unsorted());
+            BeanUtils.copyProperties(comments, comments, "article");
+            return comments;
+        }
+    }
+
 // TODO Comments + Tag  without articles id
 // http://localhost:8080/api/v1/posts/full
-//TODO Comments without articles
-//{http://localhost:8080/api/v1/posts/2
-//post with  comment(without articles)  & tag (without articles id)
-//        "id": 2,
-//        "title": "News",
-//        "content": "Bad",
-//        "star": false,
-//        "comments": [],
-//        "hashtags": [
-//        {
-//        "id": 6,
-//        "hashtag": "TV",
-//        "articles": []
-//        },
-//        {
-//        "id": 7,
-//        "hashtag": "book",
-//        "articles": []
-//        }
-//        ]
-//        }

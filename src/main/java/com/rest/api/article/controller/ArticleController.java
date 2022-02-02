@@ -1,8 +1,8 @@
 package com.rest.api.article.controller;
 
+import com.rest.api.article.dto.PostWithCommentsDto;
 import com.rest.api.article.dto.PostWithoutCommentDto;
 import com.rest.api.article.entity.Article;
-import com.rest.api.article.repository.CommentRepository;
 import com.rest.api.article.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +16,6 @@ import java.util.Optional;
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final CommentRepository commentRepository;
-
 
     @PostMapping
     public Article addNewArticle(
@@ -64,7 +62,7 @@ public class ArticleController {
     }
 
     @GetMapping("/full")
-    public List<Article> getFullCommentsByPostId() {
-        return articleService.getPostsWithComments();
+    public List<PostWithCommentsDto> getFullCommentsByPostId() {
+        return articleService.getFullArticle();
     }
 }
