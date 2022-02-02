@@ -2,26 +2,29 @@ package com.rest.api.article.service;
 
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Tag;
+import com.rest.api.article.service.utils.DtoMapper;
 import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class TagService {
+public class TagService extends DtoMapper {
 
     private final TagRepository tagRepository;
     private final ArticleRepository articleRepository;
 
-    public Set<Tag> getAll(Article article) {
+    public Map<String, List<String>> getAll(Article article) {
         log.info("Searching All tags");
-        return article.getHashtags();
+        return tagsMapper(article);
     }
 
     public Tag addNewTag(Article articleDb, Tag tag) {
@@ -42,21 +45,27 @@ public class TagService {
         return tag;
     }
 
-    public Map<String, Article> getArticlesByTags(List<String> responseTags) {
-        if (!responseTags.isEmpty()){
-            Map<String, Article> tags = new HashMap<>();
-            responseTags.forEach(tag -> tags.put(tag, findBy(tag)));
-            return tags;
+    public Map<String, List<Article>> getArticlesByTags(List<String> tagsList) {
+        Map<String, List<Article>> tags = new HashMap<>();
+        if (!tagsList.isEmpty()){
+            tagsList.forEach(tag -> tags.put(tag, findPostBy(tag)));
         } else {
-            return tagRepository.findAllArticlesByHashtag();
+            List<Tag> allTags = tagRepository.findAll();
+            allTags.forEach(tag -> tags.put(tag.getHashtag(), findPostBy(tag.getHashtag())));
         }
+        return tags;
     }
 
-    private Article findBy(String tag) {
-        return articleRepository.findByHashtags(tag);
+    public  List<Tag> getAllTags() {
+        List<Tag> allTags = tagRepository.findAll();
+        return allTags;
     }
 
-    public Tag getTags(Article articleDb, Tag tag) {
+    private List<Article> findPostBy(String tag) {
+        return articleRepository.findByHashtags_hashtag(tag);
+    }
+
+    public Tag getTag(Article articleDb, Tag tag) {
         Article article = new Article();
         BeanUtils.copyProperties(articleDb, article, "hashtags");
         tag.setArticles(Collections.singleton(article));

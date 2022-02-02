@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 import static com.rest.api.article.security.ApplicationUserPermission.*;
 
 public enum ApplicationUserRole {
-    USER(Sets.newHashSet()),
+    USER(Sets.newHashSet(USER_READ, USER_WRITE)),
     ADMIN(Sets.newHashSet(ADMIN_READ, ADMIN_WRITE, USER_READ, USER_WRITE)),
-    MANAGER(Sets.newHashSet(ADMIN_READ, USER_READ));
+    MANAGER(Sets.newHashSet(ADMIN_READ, USER_READ, USER_WRITE));
 
     private final Set<ApplicationUserPermission> permissions;
 

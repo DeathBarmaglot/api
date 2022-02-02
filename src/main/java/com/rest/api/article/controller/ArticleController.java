@@ -5,6 +5,7 @@ import com.rest.api.article.dto.PostWithoutCommentDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,11 +50,18 @@ public class ArticleController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('user:read')")
     public List<PostWithoutCommentDto> filterBy(
             @RequestParam Optional<String> title,
             @RequestParam Optional<String> sort,
             @RequestParam Optional<Integer> page) {
         return articleService.filteredBy(sort, title, page);
+    }
+
+    @GetMapping("/{id}")
+    public PostWithCommentsDto getById(
+            @PathVariable(value = "id") Article articleDb) {
+        return articleService.getPostWithComment(articleDb);
     }
 
     @GetMapping("/star")
@@ -62,7 +70,7 @@ public class ArticleController {
     }
 
     @GetMapping("/full")
-    public List<PostWithCommentsDto> getFullCommentsByPostId() {
+    public List<PostWithCommentsDto> getFullArticles() {
         return articleService.getFullArticle();
     }
 }

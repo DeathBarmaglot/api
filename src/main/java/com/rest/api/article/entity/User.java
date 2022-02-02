@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="user_id")
-    private Long id;
+    private Long user_id;
 
     private String username;
 
@@ -26,8 +28,8 @@ public class User implements Serializable {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles = new ArrayList<>();
 
     private Boolean locked = false;
 

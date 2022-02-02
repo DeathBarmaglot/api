@@ -23,4 +23,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @EntityGraph(attributePaths = {"comments", "hashtags"})
     List<Article> findAll();
 
+    List<Article> findByHashtags_hashtag(String tag);
 }

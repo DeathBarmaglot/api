@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,11 +40,11 @@ public class Article implements Serializable {
             inverseJoinColumns = {
                     @JoinColumn(name = "tag_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
-    private Set<Tag> hashtags = new HashSet<>();
+    private Set<Tag> hashtags;
 
-//    @JoinColumn(name = "user_id")
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    private User user;
+    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private User user;
 
     public Article(String title, String content) {
         this.title = title;

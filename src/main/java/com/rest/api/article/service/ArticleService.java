@@ -7,22 +7,22 @@ import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.CommentRepository;
+import com.rest.api.article.service.utils.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class ArticleService {
+public class ArticleService extends DtoMapper {
 
     private final ArticleRepository articleRepository;
     private final CommentRepository commentRepository;
@@ -70,6 +70,7 @@ public class ArticleService {
             Optional<Integer> page) {
 
         List<Article> result;
+        List<PostWithoutCommentDto> postList = new ArrayList<>();
 
         if (title.isPresent()) {
             result = articleRepository.findByTitle(title.get());
@@ -77,7 +78,8 @@ public class ArticleService {
 
         } else if (sort.isPresent()) {
             result = articleRepository.findAll(PageRequest.of(
-                    page.orElse(0), 100, Sort.Direction.ASC, sort.orElse("id"))).getContent();
+                    page.orElse(0), 100, Sort.Direction.ASC,
+                    sort.orElse("id"))).getContent();
             log.info("Sorted article by {} to the database", sort.get());
 
         } else {
@@ -85,18 +87,9 @@ public class ArticleService {
             log.info("Searching all articles in the database");
         }
 
-        List<PostWithoutCommentDto> postWithoutCommentDtoList = new ArrayList<>();
+        result.forEach(post -> postList.add(dtoPost(post)));
 
-        result.forEach(article ->
-                postWithoutCommentDtoList.add(dtoArticleMapper(article)));
-
-        return postWithoutCommentDtoList;
-    }
-
-    private PostWithoutCommentDto dtoArticleMapper(Article article) {
-        PostWithoutCommentDto postWithoutCommentDto = new PostWithoutCommentDto();
-        BeanUtils.copyProperties(article, postWithoutCommentDto, "comment");
-        return postWithoutCommentDto;
+        return postList;
     }
 
     public List<PostWithCommentsDto> getFullArticle() {
@@ -104,27 +97,35 @@ public class ArticleService {
         List<PostWithCommentsDto> all = new ArrayList<>();
 
         articleDb.forEach(article ->
-                all.add(putPost(article)));
+                all.add(getPostWithComment(article)));
+
         return all;
     }
 
-    protected PostWithCommentsDto putPost(Article article) {
+    public PostWithCommentsDto getPostWithComment(Article article) {
         PostWithCommentsDto post = new PostWithCommentsDto();
-        BeanUtils.copyProperties(article, post, "comment");
+        BeanUtils.copyProperties(dtoPost(article), post, "comment");
         post.setComments(fetch(article));
         return post;
+    }
+
+    private PostWithoutCommentDto dtoPost(Article article) {
+        PostWithoutCommentDto postDto = new PostWithoutCommentDto();
+        BeanUtils.copyProperties(article, postDto, "comment", "hashtags");
+        postDto.setTags(tagsMapper(article).get("tags"));
+        return postDto;
     }
 
     private List<CommentWithoutPostDto> fetch(Article article) {
         List<CommentWithoutPostDto> commentWithoutPostDtoList = new ArrayList<>();
         List<Comment> comments = commentRepository.findByArticle(article, Sort.unsorted());
 
-        comments.forEach(comment -> commentWithoutPostDtoList.add(dtoCommentMapper(comment)));
+        comments.forEach(comment -> commentWithoutPostDtoList.add(dtoComment(comment)));
 
         return commentWithoutPostDtoList;
     }
 
-    private CommentWithoutPostDto dtoCommentMapper(Comment comment) {
+    private CommentWithoutPostDto dtoComment(Comment comment) {
         CommentWithoutPostDto commentWithoutPostDto = new CommentWithoutPostDto();
         BeanUtils.copyProperties(comment, commentWithoutPostDto, "article");
         return commentWithoutPostDto;

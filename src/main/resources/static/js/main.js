@@ -1,4 +1,4 @@
-var messageApi = Vue.resource('/api/v1/posts{/id}');
+var messageApi = Vue.resource('http://localhost:8080/api/v1/posts');
 
 Vue.component('post-row',{
     props:['post'],

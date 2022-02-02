@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +17,7 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping("/{id}/tags")
-    public Set<Tag> getAllTagsByArticleId(
+    public Map<String, List<String>> getAllTagsByArticleId(
             @PathVariable(value = "id") Article articleDb) {
         return tagService.getAll(articleDb);
     }
@@ -39,18 +38,15 @@ public class TagController {
 
     @GetMapping("/tags")
     @ResponseBody
-    public Map<String, Article> getAllTaggedArticles(
-            @RequestParam List<String> tag) {
-        return tagService.getArticlesByTags(tag);
+    public Map<String, List<Article>> getAll(
+            @RequestParam List<String> tags) {
+        return tagService.getArticlesByTags(tags);
     }
 
     @GetMapping("/{id}/tags/{tagId}")
     public Tag getTagById(
             @PathVariable(value = "id") Article articleDb,
             @PathVariable(value = "tagId") Tag tag) {
-        return tagService.getTags(articleDb, tag);
+        return tagService.getTag(articleDb, tag);
     }
 }
-
-//TODO Filter & sort
-// http://localhost:8080/api/v1/posts/1/tags?id=8&id=9

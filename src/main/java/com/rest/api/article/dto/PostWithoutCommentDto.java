@@ -1,10 +1,9 @@
 package com.rest.api.article.dto;
 
-import com.rest.api.article.entity.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Setter
 @Getter
@@ -18,5 +17,5 @@ public class PostWithoutCommentDto {
 
     private boolean star;
 
-    private Set<Tag> hashtags;
+    private List<String> tags;
 }

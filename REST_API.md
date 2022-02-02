@@ -45,7 +45,7 @@
 Relation b/w posts & tags @ManyToMany
 
 Разработать Controller  REST api task 7:tags.
-GET, POST, DELETE, findAll article wit tag (Добавить таг, удалить таг, получить все таги)
+GET, POST, DELETE, findAll article with tag (Добавить таг, удалить таг, получить все таги)
 
 filter tags Получить посты по тагу (нескольким тагам).
 @RequestParam multi (передач нескольких параментров в запрос, работой с набором фильтров.)

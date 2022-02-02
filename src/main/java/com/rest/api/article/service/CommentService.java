@@ -1,19 +1,22 @@
 package com.rest.api.article.service;
 
 import com.rest.api.article.dto.CommentWithoutPostDto;
-import com.rest.api.article.dto.PostWithCommentsDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
 import com.rest.api.article.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CommentService {
 
@@ -49,24 +52,4 @@ public class CommentService {
         BeanUtils.copyProperties(comment, commentWithoutPostDto, "article");
         return commentWithoutPostDto;
     }
-
-    public PostWithCommentsDto getArticleWithComments(Article article) {
-            PostWithCommentsDto postWithCommentsDto = new PostWithCommentsDto();
-
-        BeanUtils.copyProperties(article, postWithCommentsDto, "comments");
-        List<CommentWithoutPostDto> commentWithoutPostDtoList = new ArrayList<>();
-            List<Comment> comments = mapper(article);
-            comments.forEach(comment -> commentWithoutPostDtoList.add(dtoCommentMapper(comment)));
-            postWithCommentsDto.setComments(commentWithoutPostDtoList);
-            return postWithCommentsDto;
-        }
-
-        private List<Comment> mapper(Article article) {
-            List<Comment> comments = commentRepository.findByArticle(article, Sort.unsorted());
-            BeanUtils.copyProperties(comments, comments, "article");
-            return comments;
-        }
-    }
-
-// TODO Comments + Tag  without articles id
-// http://localhost:8080/api/v1/posts/full
+}
