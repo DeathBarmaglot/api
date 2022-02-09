@@ -1,12 +1,10 @@
 package com.rest.api.article.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Builder
@@ -15,24 +13,26 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "comments")
-public class Comment implements Serializable {
+public class Comment {
     @Id
+    @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long comment_id;
+    private Long id;
 
-    @Column(name = "text", nullable = false)
+    @Column(nullable = false)
     private String text;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne()
+//    @JoinColumn(name = "article_id")
+//    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     private Article article;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User user;
+//    @ManyToOne()
+//    @JoinColumn(name = "user_id")
+//    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+//    private User user;
 }

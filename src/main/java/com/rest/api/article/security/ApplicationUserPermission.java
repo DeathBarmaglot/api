@@ -1,10 +1,10 @@
 package com.rest.api.article.security;
 
 public enum ApplicationUserPermission {
-    USER_READ("user:read"),
-    USER_WRITE("user:write"),
-    ADMIN_READ("admin:read"),
-    ADMIN_WRITE("admin:write");
+    ROLE_READER("user:read"),
+    ROLE_WRITER("user:write"),
+    ROLE_USER("admin:read"),
+    ROLE_ADMIN("admin:write");
 
     private final String permission;
 

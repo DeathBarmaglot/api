@@ -1,8 +1,10 @@
 package com.rest.api.article.service;
 
 import com.rest.api.article.dto.CommentWithoutPostDto;
+import com.rest.api.article.dto.PostWithCommentsDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Comment;
+import com.rest.api.article.repository.ArticleRepository;
 import com.rest.api.article.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,28 +32,26 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public List<CommentWithoutPostDto> getAllCommentsByPostId(Article article) {
-        List<Comment> comments = commentRepository.findByArticle(article, Sort.unsorted());
+        public List<CommentWithoutPostDto> getAllCommentsByPostId(Long id) {
+        List<Comment> comments = commentRepository.findByArticleId(id);
         List<CommentWithoutPostDto> result = new ArrayList<>();
         comments.forEach(comment -> result.add(dtoCommentMapper(comment)));
         return result;
     }
 
-    public Comment removeComment(Article article, Comment comment) {
-        List<Comment> comments = article.getComments();
-        comments.remove(comment);
-        article.setComments(comments);
+    public Long removeComment(Article article, Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
         commentRepository.delete(comment);
-        return comment;
-    }
-
-    public CommentWithoutPostDto getCommentByPost(Article article, Comment comment) {
-        return dtoCommentMapper(comment);
+        return comment.getId();
     }
 
     private CommentWithoutPostDto dtoCommentMapper(Comment comment) {
         CommentWithoutPostDto commentWithoutPostDto = new CommentWithoutPostDto();
         BeanUtils.copyProperties(comment, commentWithoutPostDto, "article");
         return commentWithoutPostDto;
+    }
+
+    public List<Comment> getCommentByPost(Long articleId, Long commentId) {
+        return commentRepository.findByArticleIdAndId(articleId, commentId);
     }
 }

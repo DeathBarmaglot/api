@@ -19,5 +19,5 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long role_id;
 
-    private String roleName;
+    private String role;
 }

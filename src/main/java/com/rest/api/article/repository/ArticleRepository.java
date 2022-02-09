@@ -16,12 +16,16 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     List<Article> findByStarTrue();
 
-    @EntityGraph(attributePaths = {"hashtags"})
-    Article findByHashtags(String tag);
+
+    Article findByTags(String tag);
 
     @Override
-    @EntityGraph(attributePaths = {"comments", "hashtags"})
+    @EntityGraph(attributePaths = {"tags"})
     List<Article> findAll();
 
-    List<Article> findByHashtags_hashtag(String tag);
+    @Query("select a from Article a left join a.tags tags where tags.tag in ?1")
+    List<Article> findArticlesByTags(String tag);
+//
+//    @Query("select a from Article a left join a.tags tags where tags.tag in ?1")
+//    List<Article> find(String tag);
 }

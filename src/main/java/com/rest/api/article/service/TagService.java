@@ -1,5 +1,7 @@
 package com.rest.api.article.service;
 
+import com.rest.api.article.dto.CommentWithoutPostDto;
+import com.rest.api.article.dto.PostWithCommentsDto;
 import com.rest.api.article.entity.Article;
 import com.rest.api.article.entity.Tag;
 import com.rest.api.article.service.utils.DtoMapper;
@@ -22,27 +24,56 @@ public class TagService extends DtoMapper {
     private final TagRepository tagRepository;
     private final ArticleRepository articleRepository;
 
-    public Map<String, List<String>> getAll(Article article) {
+    public List<Tag> getAll() {
         log.info("Searching All tags");
-        return tagsMapper(article);
+        return tagRepository.findAll();
     }
 
-    public Tag addNewTag(Article articleDb, Tag tag) {
-        Set<Tag> tags = articleDb.getHashtags();
-        tags.add(tag);
-        articleDb.setHashtags(tags);
+//   Set<Article> tags = tagRepository.findTagsById(id);
+
+
+    public String addNewTag(Article articleDb, Tag tag) {
         log.info("Adding New tag");
+        articleDb.getTags().add(tag);
         tagRepository.save(tag);
-        return tag;
+
+//        Article articleDb = articleRepository.getById(article);
+//        Set<Tag> setTags = new HashSet<>();
+//        List<Long> ids = new ArrayList<>();
+//        Set<Article> list = tagRepository.findTagsById(articleId);
+//        list.forEach(l-> ids.add(l.getId()));
+//        System.out.println(list);
+//        tags.add(tag);
+//        articleDb.setTags(tags);
+//        articleRepository.save(articleDb);
+        return tag.getTag();
     }
 
-    public Tag removeTag(Article article, Tag tag) {
-        Set<Tag> tags = article.getHashtags();
-        tags.remove(tag);
-        article.setHashtags(tags);
-        articleRepository.save(article);
-        log.info("Removing tag {}", tag.getHashtag());
-        return tag;
+//    public Tag removeTag(Article article, Tag tag) {
+//        Set<Tag> tags = article.getTags();
+//        tags.remove(tag);
+//        article.setTags(tags);
+//        articleRepository.save(article);
+//        log.info("Removing tag {}", tag.getHashtag());
+//        return tag;
+//    }
+
+    public Set<String> getAllTagsById(Article article) {
+        Set<Tag> setTags = article.getTags();
+        Set<String> tags = new HashSet<>();
+        setTags.forEach(tag -> tags.add(tag.getTag()));
+
+//        List<Tag> tags = tagRepository.findAll();
+
+//        List<String> hashs = new ArrayList<>();
+//        tags.forEach(tag -> hashs(tag.getHashtag()));
+        //Set<Tag> tags = article.getTags();
+
+//        PostWithoutCommentsDto full = new PostWithoutCommentsDto();
+//        List<CommentWithoutPostDto> commentsDto = fetch(comments);
+//        BeanUtils.copyProperties(article, full);
+//        full.setComments(commentsDto);
+        return tags;
     }
 
     public Map<String, List<Article>> getArticlesByTags(List<String> tagsList) {
@@ -51,24 +82,21 @@ public class TagService extends DtoMapper {
             tagsList.forEach(tag -> tags.put(tag, findPostBy(tag)));
         } else {
             List<Tag> allTags = tagRepository.findAll();
-            allTags.forEach(tag -> tags.put(tag.getHashtag(), findPostBy(tag.getHashtag())));
+            allTags.forEach(tag -> tags.put(tag.getTag(), findPostBy(tag.getTag())));
         }
         return tags;
     }
 
-    public  List<Tag> getAllTags() {
-        List<Tag> allTags = tagRepository.findAll();
-        return allTags;
-    }
 
     private List<Article> findPostBy(String tag) {
-        return articleRepository.findByHashtags_hashtag(tag);
+        return articleRepository.findArticlesByTags(tag);
     }
-
-    public Tag getTag(Article articleDb, Tag tag) {
-        Article article = new Article();
-        BeanUtils.copyProperties(articleDb, article, "hashtags");
-        tag.setArticles(Collections.singleton(article));
-        return tag;
-    }
+//
+//    public Tag getTag(Article articleDb, Tag tag) {
+//        Article article = new Article();
+//        BeanUtils.copyProperties(articleDb, article, "tags");
+//        tag.setArticles(Collections.singleton(article));
+//        return tag;
+//    }
+    //TODO http://localhost:8080/api/v1/posts/tags
 }

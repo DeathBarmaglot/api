@@ -1,3 +1,4 @@
+https://app.travis-ci.com/DeathBarmaglot/api.svg?branch=master
 #Blog
 ##level 1:
 ###У нас есть следующая сущность. Пост -> id, title, content

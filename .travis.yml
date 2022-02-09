@@ -1,0 +1,15 @@
+language: java
+matrix:
+  include:
+    - jdk: openjdk8
+      os: linux
+    - jdk: openjdk9
+      os: osx
+
+before_script: sudo chmod +x mvnw
+
+script:
+  - sudo ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - sudo ./mvnw test
+
+after_success: bash <(curl -s https://sarafan-spring-boot.herokuapp.com/)

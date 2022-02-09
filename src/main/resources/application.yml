@@ -22,5 +22,10 @@ logging:
   level:
     org:
       hibernate:
-#        SQL: debug
-#        type: trace
+       SQL: debug
+#       type: trace
+
+jwt:
+  token:
+    secret: secret
+    expired: 3600000

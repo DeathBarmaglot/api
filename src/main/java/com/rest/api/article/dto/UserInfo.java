@@ -1,4 +1,4 @@
-package com.rest.api.article.service.utils;
+package com.rest.api.article.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

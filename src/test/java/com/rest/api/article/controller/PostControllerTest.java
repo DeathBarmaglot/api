@@ -5,7 +5,7 @@
 //import com.fasterxml.jackson.databind.ObjectWriter;
 //import com.fasterxml.jackson.databind.SerializationFeature;
 //import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-//import com.rest.api.article.NotFoundException;
+//import com.rest.api.article.service.utils.NotFoundException;
 //import com.rest.api.article.entity.Article;
 //import com.rest.api.article.entity.User;
 //import com.rest.api.article.repository.ArticleRepository;
@@ -48,7 +48,7 @@
 //    @InjectMocks
 //    private final ArticleRepository articleRepository = Mockito.mock(ArticleRepository.class);
 //
-//    Article ARTICLE = new Article(1L,"Test", "add",false,null,null);
+//    Article ARTICLE = Article.builder().id(1L).title("Post").content("Test").star(true).build();
 //
 //    @Test
 //    public void testAddNewArticle() {
@@ -64,7 +64,7 @@
 //    public void testUpdateArticle() throws Exception {
 //
 //        String uri = HOST + "/1";
-//        Article newArticle = new Article(1L,"Test", "add",false,null,null);
+//        Article newArticle = Article.builder().id(1L).title("Post").content("Test").star(true).build();
 //        Mockito.when(articleRepository.save(newArticle)).thenReturn(newArticle);
 //
 //        Mockito.when(articleRepository.findById(ARTICLE.getId())).thenReturn(Optional.of(ARTICLE));
@@ -158,7 +158,7 @@
 //
 //    @Test
 //    public void testCreateArticle_success() throws Exception {
-//        Article newArticle = new Article(1L,"Test", "add",false,null,null);
+//        Article newArticle = Article.builder().id(1L).title("Post").content("Test").star(true).build();
 //
 //        Mockito.when(articleRepository.save(newArticle)).thenReturn(newArticle);
 //

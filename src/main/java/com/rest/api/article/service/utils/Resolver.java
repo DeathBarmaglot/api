@@ -1,5 +1,6 @@
 package com.rest.api.article.service.utils;
 
+import com.rest.api.article.dto.UserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

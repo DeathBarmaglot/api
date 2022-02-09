@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 public class CommentWithoutPostDto {
 
-    private Long comment_id;
+    private Long id;
 
     private String text;
 

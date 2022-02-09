@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,37 +17,36 @@ public class TagController {
 
     private final TagService tagService;
 
-    @GetMapping("/{id}/tags")
-    public Map<String, List<String>> getAllTagsByArticleId(
-            @PathVariable(value = "id") Article articleDb) {
-        return tagService.getAll(articleDb);
+    @GetMapping("/{articleId}/tags")
+    public Set<String> getAllTagsByArticleId(
+            @PathVariable(value = "articleId") Article article) {
+        return tagService.getAllTagsById(article);
     }
 
-    @PostMapping("/{id}/tags")
-    public Tag addNewTag(
-            @PathVariable(value = "id") Article articleDb,
+    @PostMapping("/{articleId}/tags")
+    public String addNewTag(
+            @PathVariable(value = "articleId") Article article,
             @RequestBody Tag tag) {
-        return tagService.addNewTag(articleDb, tag);
+        return tagService.addNewTag(article, tag);
     }
 
-    @DeleteMapping("/{id}/tags/{tagId}")
-    public Tag deleteTag(
-            @PathVariable(value = "id") Article article,
-            @PathVariable(value = "tagId") Tag tag) {
-        return tagService.removeTag(article, tag);
-    }
+//    @DeleteMapping("/{articleId}/tags/{tagId}")
+//    public Tag deleteTag(
+//            @PathVariable(value = "articleId") Long articleId,
+//            @PathVariable(value = "tagId") Long tagId) {
+//        return tagService.removeTag(articleId, tagId);
+//    }
 
     @GetMapping("/tags")
     @ResponseBody
-    public Map<String, List<Article>> getAll(
-            @RequestParam List<String> tags) {
-        return tagService.getArticlesByTags(tags);
+    public List<Tag> getAll() {
+        return tagService.getAll();
     }
 
-    @GetMapping("/{id}/tags/{tagId}")
-    public Tag getTagById(
-            @PathVariable(value = "id") Article articleDb,
-            @PathVariable(value = "tagId") Tag tag) {
-        return tagService.getTag(articleDb, tag);
-    }
+//    @GetMapping("/{articleId}/tags/{tagId}")
+//    public Tag getTagById(
+//            @PathVariable(value = "articleId") Long articleId,
+//            @PathVariable(value = "tagId") Tag tagId) {
+//        return tagService.getTag(articleId, tagId);
+//    }
 }

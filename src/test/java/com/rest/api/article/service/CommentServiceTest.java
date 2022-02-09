@@ -31,8 +31,7 @@
 //
 //        CommentService commentService = new CommentService(commentRepository);
 //        Comment comment_mock = Comment.builder().id(1L).text("Comment").build();
-//        Article article_mock = Article.builder().id(1L).title("Post").content("Test").star(true)
-//                .comments(Collections.singletonList(comment_mock)).build();
+//        Article article_mock = Article.builder().id(1L).title("Post").content("Test").star(true).build();
 //
 //        when(commentRepository.save(comment_mock)).thenReturn(comment_mock);
 //
@@ -42,46 +41,46 @@
 //        verify(commentRepository, times(1)).save(comment_mock);
 //    }
 //
-//    @Test
-//    @DisplayName("Get all Comments By Article Test")
-//    void getAllCommentsByPostId() {
-//        CommentService commentService = new CommentService(commentRepository);
-//        Comment comment_mock1 = Comment.builder().id(1L).text("New Test").build();
-//        Comment comment_mock = Comment.builder().id(2L).text("Test").build();
-//        List<Comment> commentList = List.of(comment_mock, comment_mock1);
-//
-//        Article article_mock = Article.builder().id(1L).title("Post").content("Test").comments(commentList).build();
-//
-//        when(commentRepository.findByArticle(article_mock, Sort.unsorted())).thenReturn(commentList);
-//
-//        List<Comment> actual = commentService.getAllCommentsByPostId(article_mock);
-//
-//        assertEquals(commentList, actual);
-//        verify(commentRepository, times(1)).findByArticle(article_mock, Sort.unsorted());
-//    }
-//
-//    @Test
-//    @DisplayName("Remove Comment Test")
-//    void removeComment() {
-//
-//        CommentService commentService = new CommentService(commentRepository);
+////    @Test
+////    @DisplayName("Get all Comments By Article Test")
+////    void getAllCommentsByPostId() {
+////        CommentService commentService = new CommentService(commentRepository);
 ////        Comment comment_mock1 = Comment.builder().id(1L).text("New Test").build();
-//        Comment comment_mock = Comment.builder().id(2L).text("Test").build();
-//        List<Comment> commentList = List.of(comment_mock);
+////        Comment comment_mock = Comment.builder().id(2L).text("Test").build();
+////        List<Comment> commentList = List.of(comment_mock, comment_mock1);
+////
+////        Article article_mock = Article.builder().id(1L).title("Post").content("Test").build();
+////
+////        when(commentRepository.findByArticle(article_mock, Sort.unsorted())).thenReturn(commentList);
+////
+////        List<Comment> actual = commentService.getAllCommentsByPostId(article_mock);
+////
+////        assertEquals(commentList, actual);
+////        verify(commentRepository, times(1)).findByArticle(article_mock, Sort.unsorted());
+////    }
 //
-//        Article article_mock = Article.builder().id(1L).title("Post").content("Test").comments(commentList).build();
-//
-//        when(commentRepository.findByArticle(article_mock, Sort.unsorted())).thenReturn(commentList);
-//        List<Comment> actual = commentService.getAllCommentsByPostId(article_mock);
-//
-//        assertEquals(1, actual.size());
-//
-//        commentService.removeComment(article_mock, comment_mock);
-//
-//        List<Comment> actual1 = commentService.getAllCommentsByPostId(article_mock);
-//        assertEquals(0, actual1.size());
-//        verify(commentRepository, times(1)).delete(comment_mock);
-//    }
+////    @Test
+////    @DisplayName("Remove Comment Test")
+////    void removeComment() {
+////
+////        CommentService commentService = new CommentService(commentRepository);
+//////        Comment comment_mock1 = Comment.builder().id(1L).text("New Test").build();
+////        Comment comment_mock = Comment.builder().id(2L).text("Test").build();
+////        List<Comment> commentList = List.of(comment_mock);
+////
+////        Article article_mock = Article.builder().id(1L).title("Post").content("Test").comments(commentList).build();
+////
+////        when(commentRepository.findByArticle(article_mock, Sort.unsorted())).thenReturn(commentList);
+////        List<Comment> actual = commentService.getAllCommentsByPostId(article_mock);
+////
+////        assertEquals(1, actual.size());
+////
+////        commentService.removeComment(article_mock, comment_mock);
+////
+////        List<Comment> actual1 = commentService.getAllCommentsByPostId(article_mock);
+////        assertEquals(0, actual1.size());
+////        verify(commentRepository, times(1)).delete(comment_mock);
+////    }
 ////
 //
 //////        Optional<Article> optionalArticle = Optional.of(article_mock);
@@ -102,7 +101,7 @@
 //        Comment comment_mock = Comment.builder().id(2L).text("Test").build();
 //        List<Comment> commentList = List.of(comment_mock, comment_mock1);
 //
-//        Article article_mock = Article.builder().id(1L).title("Post").content("Test").comments(commentList).build();
+//        Article article_mock = Article.builder().id(1L).title("Post").content("Test").build();
 //
 ////        when(commentRepository.findCommentByArticle(article_mock.getId(), comment_mock.getComment_id())).thenReturn(comment_mock);
 ////
