@@ -1,7 +1,7 @@
 language: java
 matrix:
   include:
-    - jdk: openjdk8
+    - jdk: openjdk11
       os: linux
     - jdk: openjdk9
       os: osx
@@ -11,5 +11,11 @@ before_script: sudo chmod +x mvnw
 script:
   - sudo ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
   - sudo ./mvnw test
+  - sudo ./mvnw run -8080:8080 java-docker
+  - sudo docker build --tag java-docker .
+  - sudo docker images
+  - sudo docker run -8080:8080 java-docker
+  - sudo docker-machine ls	
+  - curl --request GET --url https://sarafan-spring-boot.herokuapp.com/ --header 'content-type: application/json'
 
 after_success: bash <(curl -s https://sarafan-spring-boot.herokuapp.com/)
