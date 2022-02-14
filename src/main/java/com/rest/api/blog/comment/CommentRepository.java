@@ -1,6 +1,5 @@
 package com.rest.api.blog.comment;
 
-import com.rest.api.blog.comment.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,5 +13,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<List<Comment>> findCommentsByArticle(List<Long> ids);
 
     List<Comment> findByArticleId(Long id);
+
     List<Comment> findByArticleIdAndId(Long articleId, Long commentId);
+
 }

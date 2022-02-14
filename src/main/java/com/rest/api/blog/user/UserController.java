@@ -5,9 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rest.api.ApiApplication;
 import com.rest.api.blog.role.Role;
-import com.rest.api.blog.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1")
 public class UserController {
-    private final ApiApplication.UserService userService;
+    private final CustomUserService userService;
 
     @GetMapping("/users")
     public List<User> getAllUser() {

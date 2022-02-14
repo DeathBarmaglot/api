@@ -13,11 +13,12 @@ import java.util.Set;
 public class TagController {
 
     private final TagService tagService;
+    private final TagDto tagDto;
 
     @GetMapping("/{articleId}/tags")
     public Set<String> getAllTagsByArticleId(
-            @PathVariable(value = "articleId") Article article) {
-        return tagService.getAllTagsById(article);
+            @PathVariable(value = "articleId") Long id) {
+        return tagDto.getAllTagsById(id);
     }
 
     @PostMapping("/{articleId}/tags")
@@ -36,7 +37,7 @@ public class TagController {
 
     @GetMapping("/tags")
     @ResponseBody
-    public List<Tag> getAll() {
-        return tagService.getAllTags();
+    public List<String> getAll() {
+        return tagDto.getAllTag();
     }
 }

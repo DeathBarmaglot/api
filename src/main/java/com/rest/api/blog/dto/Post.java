@@ -1,8 +1,10 @@
 package com.rest.api.blog.dto;
 
+import com.rest.api.blog.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -12,9 +14,13 @@ public class Post {
 
     private String title;
 
+    private String content;
+
     private boolean star;
 
-    private Set<CommentText> comments;
+    private List<CommentWithoutPostDto> comments;
 
-    private Set<Hash> tags;
+    private Set<String> tags;
+
+    private User user;
 }

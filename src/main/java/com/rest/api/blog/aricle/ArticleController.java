@@ -1,8 +1,8 @@
 package com.rest.api.blog.aricle;
 
+import com.rest.api.blog.dto.Post;
 import com.rest.api.blog.dto.PostWithCommentsDto;
 import com.rest.api.blog.dto.PostWithoutCommentDto;
-import com.rest.api.blog.comment.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +14,7 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final ArticleDto articleDto;
 
     @PostMapping
     public Article addNewArticle(@RequestBody Article article) {
@@ -28,9 +29,9 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    Long deleteArticle(
+    void deleteArticle(
             @PathVariable(value = "id") Long articleId) {
-        return articleService.removeArticle(articleId);
+        articleService.removeArticle(articleId);
     }
 
     @PutMapping("/{id}/star")
@@ -45,7 +46,7 @@ public class ArticleController {
 
     @GetMapping("/{id}")
     public PostWithCommentsDto getById(@PathVariable(value = "id") Long id) {
-        return articleService.getAllCommentsByPostId(id);
+        return articleDto.getAllCommentsByPostId(id);
     }
 
     @GetMapping("/star")
@@ -53,13 +54,18 @@ public class ArticleController {
         return articleService.getByStar();
     }
 
-    @GetMapping
-    public List<PostWithoutCommentDto> getFullArticles() {
-        return articleService.getAll();
+    @GetMapping("/comments")
+    public List<Post> getArticlesWithComments() {
+        return articleDto.getAll();
     }
 
     @GetMapping("/full")
-    public List<List<Comment>> getAll() {
-        return articleService.getFullArticles();
+    public List<Post> getAllArticlesWithComments() {
+        return articleDto.getFullPost();
+    }
+
+    @GetMapping("/")
+    public List<PostWithoutCommentDto> getAll() {
+        return articleDto.getFullArticles();
     }
 }

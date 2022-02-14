@@ -1,7 +1,7 @@
 package com.rest.api.blog.comment;
 
-import com.rest.api.blog.dto.CommentWithoutPostDto;
 import com.rest.api.blog.aricle.Article;
+import com.rest.api.blog.dto.CommentWithoutPostDto;
 import com.rest.api.blog.utils.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,5 +42,10 @@ public class CommentService extends DtoMapper {
 
     public List<Comment> getCommentByPost(Long articleId, Long commentId) {
         return commentRepository.findByArticleIdAndId(articleId, commentId);
+    }
+
+    public List<List<Comment>> getCommentsByIds(List<Long> ids) {
+        log.debug("Searching all comments");
+        return commentRepository.findCommentsByArticle(ids);
     }
 }

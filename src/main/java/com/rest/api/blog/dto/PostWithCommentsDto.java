@@ -3,7 +3,6 @@ package com.rest.api.blog.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -14,13 +13,11 @@ public class PostWithCommentsDto {
 
     private String title;
 
-    private String content;
-
     private boolean star;
 
-    private List<CommentWithoutPostDto> comments;
+    private Set<String> comments;
 
-    private Set<Hash> tags;
+    private Set<String> tags;
 }
 
 

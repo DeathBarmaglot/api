@@ -8,9 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -33,20 +31,18 @@ public class TagService extends DtoMapper {
         return tag.getTag();
     }
 
-    public Set<String> getAllTagsById(Article article) {
-        Set<Tag> setTags = article.getTags();
-        Set<String> tags = new HashSet<>();
-        setTags.forEach(tag -> tags.add(tag.getTag()));
-        return tags;
-    }
-
     public Set<Tag> removeTag(Long articleId, Tag tag) {
+        log.info("Removing tag {}", tag.getTag());
         Article article = articleRepository.getById(articleId);
         Set<Tag> tags = article.getTags();
         tags.remove(tag);
         article.setTags(tags);
         articleRepository.save(article);
-        log.info("Removing tag {}", tag.getTag());
         return tags;
+    }
+
+    public Set<Article> getAllTagsById(Long id) {
+        log.info("getAllTagsById {}", id);
+        return tagRepository.findTagsById(id);
     }
 }

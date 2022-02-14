@@ -1,7 +1,5 @@
 package com.rest.api.blog.user;
 
-import com.rest.api.ApiApplication;
-import com.rest.api.blog.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/admin")
 public class AdminController {
 
-    private final ApiApplication.UserService userService;
+    private final CustomUserService userService;
 
     @PostMapping
     @PreAuthorize("hasAuthority('admin:write')")

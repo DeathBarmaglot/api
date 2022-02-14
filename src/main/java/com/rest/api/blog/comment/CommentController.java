@@ -2,8 +2,7 @@ package com.rest.api.blog.comment;
 
 import com.rest.api.blog.dto.CommentWithoutPostDto;
 import com.rest.api.blog.aricle.Article;
-import com.rest.api.blog.comment.Comment;
-import com.rest.api.blog.comment.CommentService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/posts")
 public class CommentController {
+
     private final CommentService commentService;
 
     @GetMapping("/{articleId}/comments/{commentId}")
